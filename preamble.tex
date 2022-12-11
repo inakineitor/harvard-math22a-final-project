@@ -354,39 +354,77 @@
 % EXAMPLE BOX
 %================================
 
+% TODO UPDATE THIS PROPERLY
+
 \newtcbtheorem[number within=section]{Example}{Example}
 {%
-	colback = myexamplebg
+	opacityfill=0,
 	,breakable
-	,colframe = myexamplefr
-	,coltitle = myexampleti
-	,boxrule = 1pt
-	,sharp corners
+	,coltitle = black
 	,detach title
 	,before upper=\tcbtitle\par\smallskip
 	,fonttitle = \bfseries
 	,description font = \mdseries
 	,separator sign none
 	,description delimiters parenthesis
+	,left = 0mm
+	,right = 0mm
+	,top = 0mm
+	,bottom = 0mm
 }
 {ex}
 
 \newtcbtheorem[number within=chapter]{example}{Example}
 {%
-	colback = myexamplebg
+	opacityfill=0,
 	,breakable
-	,colframe = myexamplefr
-	,coltitle = myexampleti
-	,boxrule = 1pt
-	,sharp corners
+	,coltitle = black
 	,detach title
 	,before upper=\tcbtitle\par\smallskip
 	,fonttitle = \bfseries
 	,description font = \mdseries
 	,separator sign none
 	,description delimiters parenthesis
+	,left = 0mm
+	,right = 0mm
+	,top = 0mm
+	,bottom = 0mm
 }
 {ex}
+
+% \newtcbtheorem[number within=section]{Example}{Example}
+% {%
+% 	colback = myexamplebg
+% 	,breakable
+% 	,colframe = myexamplefr
+% 	,coltitle = myexampleti
+% 	,boxrule = 1pt
+% 	,sharp corners
+% 	,detach title
+% 	,before upper=\tcbtitle\par\smallskip
+% 	,fonttitle = \bfseries
+% 	,description font = \mdseries
+% 	,separator sign none
+% 	,description delimiters parenthesis
+% }
+% {ex}
+
+% \newtcbtheorem[number within=chapter]{example}{Example}
+% {%
+% 	colback = myexamplebg
+% 	,breakable
+% 	,colframe = myexamplefr
+% 	,coltitle = myexampleti
+% 	,boxrule = 1pt
+% 	,sharp corners
+% 	,detach title
+% 	,before upper=\tcbtitle\par\smallskip
+% 	,fonttitle = \bfseries
+% 	,description font = \mdseries
+% 	,separator sign none
+% 	,description delimiters parenthesis
+% }
+% {ex}
 
 %================================
 % DEFINITION BOX
@@ -557,7 +595,7 @@
 	colframe=gray!80!black,
 	size=small,
 	boxrule=1pt,
-	title=\textbf{Note:-},
+	title=\textbf{Note:},
 	halign title=flush center,
 	coltitle=black,
 	breakable,
