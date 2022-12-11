@@ -1,0 +1,490 @@
+\documentclass[12pt]{extarticle} 
+
+\usepackage{classTools}
+\usepackage{ialib}
+\input{stats-import}
+
+% Language setting
+% Replace `english' with e.g. `spanish' to change the document language
+\usepackage[english]{babel}
+
+% Set page size and margins
+% Replace `letterpaper' with `a4paper' for UK/EU standard size
+\usepackage[letterpaper,top=3cm,bottom=3cm,left=3.5cm,right=3.5cm,marginparwidth=2.5cm]{geometry}
+\usepackage{indentfirst}
+
+% Useful packages
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{pgfplots}
+%\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+
+\title{%
+    Introduction to Data Compression \\
+    \large{A Linear Algebra Approach}
+}
+\author{Layan Ansari, Adam Pearl, Iñaki Arango}
+
+\begin{document}
+    \maketitle
+    
+    %\begin{abstract}
+    %    \blindtext[3]
+    %    \Inote{Consider removing abstract}
+    %\end{abstract}
+    
+    \pagebreak
+    
+    % ================== %
+    % == Cover Letter == %
+    % ================== %
+    \vspace*{1cm}
+    \centerline{\huge\huge Cover Letter}
+    \vspace*{1cm}
+
+    \blindtext[2]
+    
+    \pagebreak
+    
+    % ======================= %
+    % == Table of Contents == %
+    % ======================= %
+    \vspace*{1cm}
+    \centerline{\huge\huge Table of Contents}
+    \vspace*{1cm}
+    
+    \tableofcontents
+    
+    \pagebreak
+
+    % ============== %
+    % == Contents == %
+    % ===0========== %    
+    \section{Introduction}
+        Data flows everywhere, it is in every product that we interact with daily. More than 2.5 quintillion bytes are created every day (that is 2.5 followed by 18 zeros) \cite{alexaqz_2015}. For the next 5 years data is expected to grow by 40\% every year \cite{marr_2022}.
+
+        We need, and will continue to need, more powerful and faster computers capable of processing this increasing amount of information, and better storage systems to safekeep it.
+
+        There has been a lot of improvement hardware-wise in the last couple of decades, which increased the density of our storage systems. However, what if we could improve our information storage density through other, non-physical, means? What if we could store the same amount of ``information'' but with less ``bits''? This would allow us to work in parallel with scientists researching physical systems.
+        
+        This is where data compression comes in. It allows us to store the same amount of "information" in less bits, digits, characters, or whatever the most basic unit of storage is in our medium of choice. An early example of compression work is the Morse Code, which was invented in 1838 for use in the telegraph industry. Telegraph bandwidth was scarce, so shorter code words were assigned for common letters in the English alphabet, such as ``e'' and ``t'', that would be sent more often \cite{Wolfram2002}.
+    
+    \section{Tools for Compression}
+        There are various tools at our disposal that we can use to study and perform data compression. Many of the common techniques that are used today are the outcome of collaboration between scientists and engineers focused on different branches of Math, such as Probability, Statistics, Information Theory, and Linear Algebra.
+        
+        While we have focused on Linear Algebra this semester, it is necessary to know some introductory concepts from these other branches to understand basic data compression. In this section we will introduce these branches and explain some of their basic concepts.
+        
+        \subsection{Probability \& Statistics}
+            Probability is the study of the the likelihood of events, independently and given the occurrence of other events (e.g., given that it is cloudy, what is the probability that it will rain today?). Statistics is the discipline that concerns the collection, organization, analysis, interpretation, and presentation of data \cite{wiki:Statistics}.
+
+            \subsubsection{Sample Space}
+                The most basic concept in probability is that of the \textbf{sample space} and \textbf{events}.
+    
+                \textbf{DEFINITION 1:} The \textbf{sample space} is the set of all possible outcomes that an experiment can have. If we flip a coin then the sample space is $S = \{ \text{Heads}, \text{Tails}\}$ and if we roll a 6-sided die the sample space is $S = \{ 1, 2, 3, 4, 5, 6 \}$. \Inote{Change this definition style for the one found on GitHub}
+                
+            \subsubsection{Events}
+                \textbf{DEFINITION 2:} \textbf{Events} are then mathematically defined as a subset of the sample space. For example, in the 6-sided die example let $M$ be the event we roll a 4 or greater. Then $M = \{4, 5, 6\} \subseteq S$.
+
+            \subsubsection{Probability}
+                \textbf{DEFINITION 3:} The \textbf{probability} of an event (denote $P(M)$ for an event $M$) is the measure of how likely the event is to occur as the outcome of a random experiment.
+                
+                Probability is measured out of 1, which means that events certain to occur have a probability of 1 and events that will never occur have a probability of 0. Naturally, the probability of the sample space $P(S) = 1$, since, by definition, the outcome of the experiment must be one in the sample space.
+            
+            \subsubsection{Random Variables}
+                \textbf{DEFINITION 4:} \textbf{Random variables} (also r.v.'s) are functions that map the outcome of a random experiment (in the sample space) to a measurable quantity (e.g., real number) or a mathematical object. When the experiment is performed, and the outcome is mapped to a value, we say the random variable ``crystallizes'' to that value. The set of all values a random variable crystallizes to is called the support, denoted $R_X$ for a r.v. $X$. A specified random variable crystallizing to a certain value is an event.
+
+                We normally denote random variables with capital letters and their crystallized values with lower case letters.
+                
+                \textbf{Example:} Let us flip a fair coin with equal probabilities of landing heads or tails. The sample space is then $S = \{H, T\}$ with $P(\{H\}) = P(\{T\}) = 0.5$.
+                
+                Let $X$ be a random variable that crystallizes to -1 if the coin lands Heads and to 1 if the coin lands Tails. Then $X = -1$ and $X = 1$ are events and we write $P(X = -1) = P(\{H\})$ and $P(X = 1) = P(\{T\})$.
+
+            \subsubsection{Expectation}
+                \textbf{DEFINITION 5:} The \textbf{expectation} of a random variable $X$ with , denoted $\IAexpected(X)$ is the the average value that the random variable will hold weighted by the probability of the variable crystallizing to that value. If there is no ambiguity over what variable we are taking about, we use the letter $\mu = \IAexpected(X)$- Its formula is
+                    \[\IAmean{X} = \IAexpected(X) = \sum_{x \in R_X} x \cdot P(X = x)\]
+
+            \Inote{Remove any of these definitions if they are not needed during the paper}
+            
+            \subsubsection{Variance}
+                \textbf{DEFINITION 6:} \textbf{Variance} is a measure of spread. It measures how far the values in the support of an r.v. are to the mean. For a r.v. $X$ we denote its variance as $\var(X)$. The formula for variance is
+                    \[\var(X) = \IAexpected(X^2) - [\IAexpected(X)]^2\]
+
+                Its cousin, \textbf{standard deviation}, is defined as $\sigma = \sqrt{\var(X)}$, and is used because it is sometimes more practical to express the spread in terms of standard deviation.
+            
+            \subsubsection{Covariance}
+                \textbf{DEFINITION 7:} While the variance is the measure of spread for a single variance, the \textbf{covariance} is the measure of joint between two random variables \cite{Rice2007}. If greater values of one variable correspond to greater values of the other variable covariance is positive. If greater values of one variable correspond to lesser values of the other variable, covariance is negative.
+                
+                Below is a graphical comparison of what negative, zero and positive covariance looks like between two random variables. Each point encodes one instance of the two variables crystallized together.
+                \begin{figure}[!htb]
+                    \centering
+                    \begin{minipage}{0.3\textwidth}
+                        \centering
+                        \begin{tikzpicture}
+                            \begin{axis}[
+                                width=2.25in,
+                                height=2.25in,
+                                xmin=-1,
+                                xmax=5,
+                                ymin=-1,
+                                ymax=5,
+                                axis lines=middle,
+                                xlabel={$X$},
+                                ylabel={$Y$}]
+                                \addplot[mark=*] coordinates {(1,4)} node(A){};
+                                \addplot[mark=*] coordinates {(2,3)};
+                                \addplot[mark=*] coordinates {(2,2)};
+                                \addplot[mark=*] coordinates {(3,1)};
+                                \addplot[mark=*] coordinates {(4,1)} node(B){};
+                                \addplot[mark=*] coordinates {(4,2)};
+                                \addplot[mark=*] coordinates {(3,3)};
+                                \addplot[mark=*] coordinates {(2,4)};
+                                \node (C)[very thick,draw=blue!75!black,ellipse,rotate fit=40,fit=(A) (B),fill=blue,opacity=0.1] {};
+                            \end{axis}
+                        \end{tikzpicture}
+                        $\cov(X, Y) < 0$
+                        \label{fig:negative_cov}
+                    \end{minipage}
+                    \begin{minipage}{0.3\textwidth}
+                        \centering
+                        \begin{tikzpicture}
+                            \begin{axis}[
+                                width=2.25in,
+                                height=2.25in,
+                                xmin=-1,
+                                xmax=5,
+                                ymin=-1,
+                                ymax=5,
+                                axis lines=middle,
+                                xlabel={$X$},
+                                ylabel={$Y$}]
+                                \addplot[mark=*] coordinates {(1.5,2.5)};
+                                \addplot[mark=*] coordinates {(2,3)};
+                                \addplot[mark=*] coordinates {(3,2)} node(B){};
+                                \addplot[mark=*] coordinates {(2,1)};
+                                \addplot[mark=*] coordinates {(2,2)};
+                                \addplot[mark=*] coordinates {(2,3)};
+                                \addplot[mark=*] coordinates {(1,2)} node(A){};
+                                \addplot[mark=*] coordinates {(2.75,1.75)};
+                                \node (C)[very thick,draw=blue!75!black,ellipse,rotate fit=40,fit=(A) (B),fill=blue,opacity=0.1] {};
+                            \end{axis}
+                        \end{tikzpicture}
+                        $\cov(X, Y) = 0$
+                        \label{fig:zero_cov}
+                    \end{minipage}
+                    \begin{minipage}{.3\textwidth}
+                        \centering
+                        \begin{tikzpicture}
+                            \begin{axis}[
+                                width=2.25in,
+                                height=2.25in,
+                                xmin=-1,
+                                xmax=5,
+                                ymin=-1,
+                                ymax=5,
+                                axis lines=middle,
+                                xlabel={$X$},
+                                ylabel={$Y$}]
+                                \addplot[mark=*] coordinates {(1,1)} node(A){};
+                                \addplot[mark=*] coordinates {(2,2)};
+                                \addplot[mark=*] coordinates {(2,3)};
+                                \addplot[mark=*] coordinates {(3,4)};
+                                \addplot[mark=*] coordinates {(4,4)} node(B){};
+                                \addplot[mark=*] coordinates {(4,3)};
+                                \addplot[mark=*] coordinates {(3,2)};
+                                \addplot[mark=*] coordinates {(2,1)};
+                                \node (C)[very thick,draw=blue!75!black,ellipse,rotate fit=-40,fit=(A) (B),fill=blue,opacity=0.1] {};
+                            \end{axis}
+                        \end{tikzpicture}
+                        $\cov(X, Y) > 0$
+                        \label{fig:positive_cov}
+                    \end{minipage}%
+                \end{figure}
+                
+            
+        
+        \subsection{Information Theory (maybe could be skipped)}
+        % ===== Put the brief history here =====
+        \subsubsection{Strictly required math/algebra information theory background}
+        \Inote{Fill out with definitions or content if it is needed for our future proofs}
+        \subsubsection{Example analyzing different areas of images XYZ}
+        \Inote{Use our variance knowledge from example image to say that some sections of the image have less information (the constant ones) and some have more information (the ones that vary widely)}
+    
+    \section{Start of the Story: What do we want to compress?}
+    \subsection{Handwriting Recognition}
+    Communication is an essential part of relating to people, and one of the oldest and most accessible methods of communication within a given language is writing by hand. In spite of the major effort that has been expended to bring about a paper-free society, a very large number of paper-based documents are processed daily by computers all over the world in order to handle, retrieve, and store information. The problem is that the manual process used to enter the data from these documents into computers demands a great deal of time and money (Bortolozzi, de Souza Britto Jr., Oliveira and Morita, n.d.)\Lnote{put in citation later}. These documents may need to be processed for a number of reasons, among them historical documentation (e.g. digitally documenting culturally and historically significant documents and scripts, which until recently were more often than not handwritten or on print paper), recognition for medical prescriptions, or for tablet soft-wares to convert users’ handwriting into digital text.
+    \newline
+    \indent Thus, the task of handwriting recognition is the transcription of handwritten data into a digital format, and this task obviously benefits from data compression. The goal is to process handwritten data electronically with the same or nearly the same accuracy as humans (Gunter, n.d)\Lnote{citation}. 
+    \newline
+    \indent Basically, handwriting can be divided into two categories, cursive script and printed handwriting. Accuracy is the main problem in handwriting recognition for both categories because of the similar strokes and shapes some letters may possess. The software may have an inaccurate recognition of the letter, considering the possibility of the handwriting being illegible or some other factors (\Lnote{citation}). One notable problem that makes this task difficult especially in cursive handwriting recognition is the fact that there may be no obvious character boundaries (the start and end of a character); compared to printed handwriting, it does not have gaps or spaces between each letter to know the start and stop of recognition per character (\Lnote{citation}). This issue is compounded for languages like Arabic, where cursive is the only form of script and there exist "shortcuts" to further simplify the cursive script and make writing more fluid (e.g. removing the "dots"/accent marks that exist above/below certain letters).
+    \newline
+    \indent This is where the data compression/dimension reduction and eigenface technique comes into play! In essence, if we have a large data set that consists of thousands or even millions of images of words (probably limited to one language), we want to find a way to recognize patterns in these images. From these patterns, we can then determine which ones have the most “importance” and attempt to express these images as a weighted combination of these most important patterns (and thus in a lower dimension).
+    
+    \section{External Background (maybe make this an appendix instead to not interrupt the flow)}
+    \subsection{Introductory Statistics }
+    \subsubsection{Sample Space}
+    \subsubsection{Events}
+    \subsubsection{Probability}
+    \subsubsection{Random Variables}
+    \subsubsection{Variance}
+    \subsubsection{Covariance}
+    \subsection{Information Theory (maybe could be skipped)}
+    \subsubsection{Brief history}
+    \blindtext
+    \subsubsection{Strictly required math/algebra information theory background}
+    \blindtext
+    \subsubsection{Example analyzing different areas of images XYZ}
+    \blindtext
+    
+    \section{Principal Component Analysis}
+    \subsection{Introduce this as a formalization of trying to extract ``high information'' regions in the data space}
+    \blindtext
+    \subsection{Quantify the intuitive findings from the information theory subsection}
+    \blindtext
+    
+    \section{Explanation through the use of Eigenvectors (interesting theorems from this, lookup Eigenfaces on Wikipedia)}
+        Section 7
+        
+        The motivation for using principal componenet anaylisis is to find what Turk and Pentland refered to as "face space." The face images, as previously explained, live as vectors in large dimensional spaces ($65,536$-dimensional space for a typical image). The goal at this stage is to reduce our large input vector space to a lower dimensional subspace that can be described be an eigenbasis. 
+        
+        In order to construct... we need to define the \textbf{covariance}. Covariance measures the overall correlation between certain variables. The covariance $\sigma$ of two variables, $X$ and $Y$, is defined
+            \[\sigma(X,Y) = \frac{1}{M} \sum _{i=1}^{M} (X_i-\IAmean{X}) (Y_i-\IAmean{Y})\]
+        
+        \textbf{Covariance matrix}, then, is a matrix that measures the covariance of various variables.
+        
+        For variables $x_1,\ldots,x_p$, the covariance matrix is defined as follows
+        \[
+            C = \IAmatrix{
+                \sigma_{11} & \sigma_{12} & ... & \sigma_{1p} \\
+                \sigma_{21} & \sigma_{22} &  & \\
+                \vdots  &  & \ddots  & \\
+                \sigma_{p1} &  &  & \sigma _{pp}
+            }
+        \]
+        
+        where $\sigma_{ij}$ represents the covariance between the $i^{th}$ and $j^{th}$ variable. In the case of eigenfaces, the $p$ independent variables correspond to our $N^{2}$ bits, and thus $p$ corresponds to the dimension of our images. 
+
+        Having thus defined our covariance matrix, we must now discuss why we are taking the eigenvectors of this particular matrix to be our eigenfaces. In order for out eigenfaces to be as efficient as possible, we want we want each eigenface to encode as much variance as possible. 
+        
+        We take eigenvectors to simplify a relation defined by matrix multiplication to a relation defined by scalar multiplication, so that we may write any face as a linear combination of eigenvectors. Taking an eigenvector $e$, $C e = \lambda e$. If $\lambda$ is large, then the covariance between $e$ and all many other faces is high. If $\lambda$ is small, then the covariance is less. Therefore, we will see later that we want to prioritize large eigenvalues when constructing our eigenbasis. 
+        
+        Before we discuss the eigenvalues, however, we must derive some more definitions of $C$.
+        
+        Firstly, given the large size of $N^2$, it is convenient for us to find a more condensed description of the covariance matrix
+        
+        \textbf{Theorem x} \Inote{Turn this into theorem box}
+        
+        Let $C$ be a $p \times p$ covariance matrix where each element $c_{ij} = \sigma_{ij}$. Let $\Phi_a = P_a - \IAmean{P}$, where $P_a = \IAmatrix{
+            x_{1a}\\
+            x_{2a}\\
+            \vdots \\
+            x_{pa}
+        }$ with $a$ from $1$ to $M$. Then $C = \frac{1}{M} \sum_{a=1}^M \Phi_a \Phi_a^T$.
+        
+        
+        
+        \textbf{Proof.} \Inote{Turn this into nicer format}
+        
+        We can prove this theorem starting with
+            \[
+                C = \IAmatrix{
+                    \sigma_{11} & \sigma_{12} & \cdots & \sigma_{1p} \\
+                    \sigma_{21} & \sigma_{22} &        &             \\
+                    \vdots      &             & \ddots &             \\
+                    \sigma_{p1} &             &        & \sigma_{pp}
+                }
+            \]
+
+        From the definition of covariance, each entry $c_{ij} = \frac{1}{M} \sum _{i=1}^M \left( x_{ia} - \IAmean{x_i}\right) \left(x_{ia} - \IAmean{x_i}\right)$. Since matrices add linearly, we can factor out the summation $\frac{1}{M} \sum_{i=1}^M$. Thus we can write
+            \[
+                C = \frac{1}{M} \sum_{i=1}^M \IAmatrix{
+                    \left(x_{1a} - \IAmean{x}_1\right) \left(x_{1a} - \IAmean{x}_1\right) & \dotsc  & \left(x_{1a} - \IAmean{x}_1\right) \left(x_{pa} - \IAmean{x}_p\right) \\
+                    \vdots & \ddots & \\
+                    \left(x_{pa} - \IAmean{x}_p\right) \left(x_{1a} - \IAmean{x}_1\right) &  & \left(x_{pa} - \IAmean{x}_p\right) \left(x_{pa} - \IAmean{x}_p\right)
+                }
+            \] \Inote{Clarify notation because $\IAmean{x}_p$ is not defined anywhere}
+        
+        
+        Now consider the term $\Phi_a \Phi_a^T = (P_i - \IAmean{P}) (P_i - \IAmean{P})^T$, as defined in the theorem. Since the transpose operator is distributive,
+            \[
+                (P_i - \IAmean{P}) (P_i - \IAmean{P})^T =
+                    \left(
+                        \IAmatrix{
+                            x_{1a} \\
+                            x_{2a} \\
+                            \vdots \\
+                            x_{pa}
+                        } - \IAmean{P}
+                    \right) \left(
+                        \IAmatrix{
+                            x_{1i} & x_{2i} & \dotsc & x_{pi}
+                        } - \IAmean{P}^T
+                    \right)
+            \]
+            \[
+                =
+                    \left(
+                        \IAmatrix{
+                            x_{1a} \\
+                            x_{2a} \\
+                            \vdots \\
+                            x_{pa}
+                        } - \IAmatrix{
+                            \IAmean{x}_1 \\
+                            \IAmean{x}_2\\
+                            \vdots \\
+                            \IAmean{x}_p
+                        }
+                    \right) \left(
+                        \IAmatrix{
+                            x_{1a} & x_{2a} & \dotsc & x_{pa}
+                        } - \IAmatrix{
+                            \IAmean{x}_1 & \IAmean{x}_2 & \dotsc & \IAmean{x}_p
+                        }
+                    \right)
+            \]
+            \[
+                =
+                    \IAmatrix{
+                        x_{1a} - \IAmean{x}_1 \\
+                        x_{2a} - x_2 \\
+                        \vdots \\
+                        x_{pa} - \IAmean{x}_p
+                    }
+                    \IAmatrix{
+                        x_{1a} - \IAmean{x}_1 & x_{2a} - \IAmean{x}_2 & \dotsc & x_{pa} -\IAmean{x}_p
+                    }
+            \]
+        
+        Therefore,
+            \[
+                \Phi_a {\Phi_a}^T = \IAmatrix{
+                    \left(x_{1a} - \IAmean{x}_1\right)\left(x_{1a} - \IAmean{x}_1\right) & \dotsc & \left(x_{1a} - \IAmean{x}_1\right) \left(x_{pa} - \IAmean{x}_p\right) \\
+                    \vdots & \ddots & \\
+                    \left(x_{pa} - \IAmean{x}_p\right) \left(x_{1a} - \IAmean{x}_1\right) & & \left(x_{pa} - \IAmean{x}_p\right) \left(x_{pa} - \IAmean{x}_p\right)
+                }
+            \]
+            \[
+                C = \frac{1}{M} \sum_{a=1}^M \Phi_a {\Phi_a}^T
+            \]
+            \qed
+        
+        By constructing 
+        
+        \href{https://builtin.com/data-science/step-step-explanation-principal-component-analysis}{REFERENCE PRINCIPAL COMPONENT ANALYSIS}
+        
+        In the eigenface case, we wish to measure the difference between our face vectors $\Gamma_i$ differ from the average face. We can define the average face $\IAmean{\Gamma}$ as follows,
+            \[
+                \IAmean{\Gamma} = \frac{1}{M} \sum_{n=1}^M \Gamma_n
+            \]
+
+        We can write the difference $\Phi_i$ between the average face and the $i^{th}$ face,
+            \[
+                \Phi_i = \Gamma_i - \IAmean{\Gamma}
+            \]
+        
+        \href{https://nzmaths.co.nz/category/glossary/variance-discrete-random-variable\#:\textasciitilde:text=A\%20measure\%20of\%20spread\%20for,2\%20or\%20\%CF\%832x.}{Hello}
+        
+        \textbf{Theorem x} \Inote{Add theorem formatting}
+        
+        Let $C$ be an $N^2 \times N^2$ covariance matrix, defined as $C = \frac{1}{M} \sum_{n=1}^M \Phi_n \Phi_n^T$, where $M$ is the dimension of the domain $C$. Let $A$ be an $N^2 \times N^2$ matrix with columns $[\Phi_1 \ \Phi_2 \ \dots \Phi_M]$. Then $C = A A^T$.
+        
+        \textbf{Proof} \Inote{Add proof styling}
+        
+        Going back to our matrix $C$,
+            \[
+                C = \IAmatrix{
+                    \sigma_{11} & \sigma_{12} & \dots  & \sigma_{1p} \\
+                    \sigma_{21} & \sigma_{22} &        &             \\
+                    \vdots      &             & \ddots &             \\
+                    \sigma_{p1} &             &        & \sigma_{pp}
+                }
+            \]
+
+         We can expand $C$ according to the definition of $\sigma$,
+            \[
+                C = \frac{1}{M} \sum_{a=1}^M \IAmatrix{
+                    \Phi_1 {\Phi_1}^T & \Phi_1 \Phi_2^T   & \dots  & \Phi_1 {\Phi_p}^T \\
+                    \Phi_2 {\Phi_1}^T & \Phi_2 {\Phi_2}^T &        &                   \\
+                    \vdots            &                   & \ddots &                   \\
+                    \Phi_p {\Phi_1}^T &                   &        & \Phi_p {\Phi_p}^T
+                }
+            \]
+    
+        ...
+        
+        Now we can express our eigenvectors $v_{i}$ and eigenvalues $\lambda _{i}$ as
+            \[
+                \lambda_i v_i = A A^T v_i
+            \]
+
+        However, $A A^T$ is an $N^2$by $N^2$ matrix (where $N \times N$ is the resolution of the image), which for images of any discernable resolution will be much larger than desired in order to compute its eigenvectors. 
+        
+        Let
+            \[
+                S = A A^T = \lambda_i v_i
+            \]
+
+        Then,
+            \[
+                S^T = (AA)^T = A^T A
+            \]
+
+        We can show that $S$ and $S^{T}$ have the same eigenvalues. 
+        
+        Since the indetity matrix is symmetrical, since the transpose operation is distributive, and since $\det(A) = \det\left(A^T\right)$,
+            \[
+                \det\left(S^T - \lambda_i I\right) = \det(S - \lambda_i I)^T = \det(S - \lambda_i I)
+            \]
+        and therefore $S$ and $S^T$ have the same eigenvalues.
+        
+        Applying this to our eigenfaces,
+            \[
+                S^T = A^T A = \lambda_i u_i
+            \]
+
+        The advantage of effectively reordering the $A$ and $A^T$ is that our new matrix $S^T$ is an $M \times M$ matrix. $M$ corresponds to the size of the training set, which in most cases is much smaller than the dimension of the resolution of the image. Therefore, it will be much easier to compute the eigenfaces. We can then write each face as a linear combination of the eigenfaces
+        
+        \href{https://datascienceplus.com/understanding-the-covariance-matrix/}{MEGAREFERENCE}
+        
+        \[
+            \Gamma_i = \sum_{n=1}^M c_{in} u_{n}
+        \]
+
+        We can interpret the eigenvectors of the covariance matrix as vectors that encode the greatest variance in data, and as such are the most suited for reconstructing faces from (ghosts). The corresponding eigenvalues tell how much variance each eigenvector encodes. For this reason, the greater the eigenvalue the more adaptable and better suited the eigen vector. When choosing eigenvectors to form a basis for the eigenspace used for facial reckognition, one therefore prioritizes them by eigenvalue from highest to lowest.
+        
+        \href{http://math.clarku.edu/\textasciitilde djoyce/ma217/covar.pdf}{AWDAWD}
+    
+    \subsection{Introducing the naive method for calculating eigenimages}
+    \blindtext
+    \subsection{Explain the simplification (using theorems and reference written in Wikipedia)}
+    \blindtext
+    \subsection{Coding example perhaps?}
+    \blindtext
+    
+    \section{Singular Value Decomposition}
+    \subsection{Explain how an alternative way to look at this is through SVD}
+    The motivation for using principal componenet anaylisis is to find what Turk and Pentland refered to as "face space." The face images, as previously explained, live as vectors in large dimensional spaces (65,536-dimensional space for a typical image). The goal at this stage is to reduce our large input vector space to a lower dimensional subspace that can be described be an eigenbasis. 
+    \newline
+    \indent In order to construct... we need to define the
+    
+    \section{Uses with Compression}
+    \subsection{XYZ storage}
+    \blindtext[1]
+    \subsection{images (medical, handrwiting, S\\XYZ), sound (voice recognition)}
+    \blindtext[1]
+    
+    \section{Uses to optimize and enable new kinds of algorithms (fingerprint detection)}
+    \subsection{XYZ recognition}
+    \blindtext[1]
+    \subsection{Facial and handrwiting detection algorithms, voice recognition algorithms}
+    \blindtext[1]
+    
+    \pagebreak
+    
+    % ================ %
+    % == References == %
+    % ================ %
+    \bibliographystyle{alpha}
+    \bibliography{sample}
+
+\end{document}
