@@ -345,7 +345,7 @@
         
     
     \chapter{Principal Component Analysis}
-        \section{Extract ``high information'' regions in the data space}
+        \section{Extracting ``high information'' regions in the data space}
             In this chapter we will see how we can use the knowledge from Chapter 2 to find efficient representations for arbitrary data, and apply that to the challenge introduced in Chapter 3.
 
             Data in its raw or most simple representation is likely to the potential to store many more values than we actually care about. For example, in the case of character recognition, lets say that the dataset that we have for each handwritten character consists a 28x28 pixel grayscale images.
@@ -1037,7 +1037,16 @@
                 \end{minipage}%
             \end{figure}
 
-            In the case of handwriting, many people write digits in different ways, but 
+        \section{A linear algebra analogy}
+            We can draw the analogy from the abstract high-level concepts that we just looked at the change of basis procedures that we studied in class. As mentioned, above, each datapoint is a vector, and an ``expression system'' is simply a set of basis vectors that can be used to write out datapoints in an expressed form.
+
+            By the theorem seen in class, if one has the same number of linearly independent vectors as dimensions in a space, that set of vectors forms a basis. But it we find a set of $n$ vectors, to represent datapoints in an $n$ dimensional space, we have achieved no compression, since we can use the standard basis and obtain the same storage efficiency.
+            
+            Ideally the dataset that we want to represent only contains vectors in a lower-dimensional subspace of the data space. That way, we can express all the data points we are interested with a smaller number of vectors.
+            
+            Unfortunately, real world data rarely fits a proper mathematical subspace, so this technique would not be reliable for all types of data. For example, assume all our data is on a plane within a 3-dimensional data space. With just one point that is not within the plane, we have increased the dimension of our subspace to 3, yielding not compression when expressing datapoints with new eigenvectors.
+            
+            Our method must take into account how ``important'' these areas of space are to decide whether it is worth reducing our compression efficiency to be able to represent only a few infrequent datapoints.
                 
             \Inote{Use our variance knowledge from example image to say that some sections of the image have less information (the constant ones) and some have more information (the ones that vary widely)}
         
