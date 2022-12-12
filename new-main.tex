@@ -155,7 +155,7 @@
             \subsection{Variance}
                 \dfn{Variance}{
                     \textbf{Variance} is a measure of spread. It measures how far the values in the support of an r.v. are to the mean. For a r.v. $X$ we denote its variance as $\var(X)$. The formula for variance is
-                        \[\var(X) = \IAexpected(X^2) - [\IAexpected(X)]^2\]
+                        \[\var(X) = \IAexpected[(X - \IAmean{X})^2] = \IAexpected(X^2) - [\IAexpected(X)]^2\]
                 }
 
                 Below is a graphical comparison of between the probability function of a low variance r.v. $X$ and the probability function of a high variance r.v. $Y$. The horizontal axis indicates a value in the support of the random variable and the vertical axis indicates the probability of the random variable taking that value.
@@ -190,7 +190,7 @@
                             \end{axis}
                         \end{tikzpicture}
                         Low Variance
-                        \label{fig:negative_cov}
+                        \label{fig:low_variance}
                     \end{minipage}
                     \begin{minipage}{0.45\textwidth}
                         \centering
@@ -220,24 +220,23 @@
                             \end{axis}
                         \end{tikzpicture}
                         High Variance
-                        \label{fig:zero_cov}
+                        \label{fig:high_variance}
                     \end{minipage}%
                 \end{figure}
 
-                \dfn{Standard Deviation}{
-                    Its cousin, \textbf{standard deviation}, is defined as $\sigma = \sqrt{\var(X)}$, and is used because it is sometimes more practical to express the spread in terms of standard deviation.
-                }
-                \Knote{Why? Might be helpful to explain it a little bit more to aid understanding in the rest of the paper}
+                % \dfn{Standard Deviation}{
+                %     Its cousin, \textbf{standard deviation}, is defined as $\sigma = \sqrt{\var(X)}$, and is used because it is sometimes more practical to express the spread in terms of standard deviation.
+                % }
+                % \Knote{Why? Might be helpful to explain it a little bit more to aid understanding in the rest of the paper}
 
             
             \subsection{Covariance}
                 \dfn{Covariance}{
-                    While the variance is the measure of spread for a single variance, the \textbf{covariance} is the measure of joint between two random variables \cite{Rice2007}. 
+                    While the variance is the measure of spread for a single variables, the \textbf{covariance} examines the directional relationship between two variables \cite{Rice2007}. Its formula is
+                        \[\Cov(X, Y) = \IAexpected[(X - \IAmean{X})(Y - \IAmean{Y})] = \IAexpected(X \dot Y) - \IAexpected(X)\IAexpected(Y)\]
                 }
-                \Knote{What is measure of joint?}
-                \nt{
-                    If greater values of one variable correspond to greater values of the other variable covariance is positive. If greater values of one variable correspond to lesser values of the other variable, covariance is negative.
-                }
+
+                If greater values of one variable correspond to greater values of the other variable covariance is positive. If greater values of one variable correspond to lesser values of the other variable, covariance is negative.
 
                 Below is a graphical comparison of what negative, zero and positive covariance looks like between two random variables. Each point encodes one instance of the two variables crystallized together.
 
@@ -326,6 +325,7 @@
                     \end{minipage}%
                 \end{figure}
                 
+                If covariance is 0, we say that variables are ``uncorrelated'', and we interpret it as there being no linear relationship between the two.
             
         
         \section{Information Theory (maybe could be skipped)}
