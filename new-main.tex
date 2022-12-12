@@ -11,7 +11,7 @@
 \input{macros}
 \input{letterfonts}
 
-\hfuzz=5.0pt
+\hfuzz=10.0pt
 \usepackage[parfill,indent]{parskip} % Removes paragraph indentation and adds space between paragraphsimage.png
 
 %\title{\Huge{Some Class}\\Random Examples}
@@ -255,7 +255,7 @@
     
     \chapter{Start of the Story: What do we want to compress?}
         \section{Handwriting Recognition}
-            Communication is an essential part of relating to people, and one of the oldest and most accessible methods of communication within a given language is writing by hand. In spite of the major effort that has been expended to bring about a paper-free society, a very large number of paper-based documents are processed daily by computers all over the world in order to handle, retrieve, and store information. The problem is that the manual process used to enter the data from these documents into computers demands a great deal of time and money (Bortolozzi, de Souza Britto Jr., Oliveira and Morita, n.d.)\Lnote{put in citation later}. These documents may need to be processed for a number of reasons, among them historical documentation (e.g. digitally documenting culturally and historically significant documents and scripts, which until recently were more often than not handwritten or on print paper), recognition for medical prescriptions, or for tablet soft-wares to convert users’ handwriting into digital text.
+            Communication is an essential part of relating to people, and one of the oldest and most accessible methods of communication within a given language is writing by hand. In spite of the major effort that has been expended to bring about a paper-free society, a very large number of paper-based documents are processed daily by computers all over the world in order to handle, retrieve, and store information. The problem is that the manual process used to enter the data from these documents into computers demands a great deal of time and money (Bortolozzi, de Souza Britto Jr., Oliveira and Morita, n.d.)\Lnote{put in citation later}. These documents may need to be processed for a number of reasons \Knote{Here you write that these documents may need to be processed for a number of reasons, but go on to explain the type of documents that are processed. The reader might expect to see the reasons for converting documents and not the type of documents processed.}, among them historical documentation (e.g. digitally documenting culturally and historically significant documents and scripts, which until recently were more often than not handwritten or on print paper), recognition for medical prescriptions, or for tablet \Knote{this last part of the sentence is a little confusing to me as to how it relates to the previous section of the sentence} soft-wares to convert user's handwriting into digital text.
         
             Thus, the task of handwriting recognition is the transcription of handwritten data into a digital format, and this task obviously benefits from data compression. The goal is to process handwritten data electronically with the same or nearly the same accuracy as humans (Gunter, n.d)\Lnote{citation}.
             
@@ -277,12 +277,13 @@
         
         \section{Formalizing the calculation of ``high information'' eigenvectors}
             \Lnote{change wording so that this applies to handwriting recognition instead of face recognition}
-            The motivation for using principal component analysis is to find what Turk and Pentland referred to as "face space," and which in our case we can conceptualize as the data space of letters. The face images, as previously explained, live as vectors in large dimensional spaces ($65,536$-dimensional space for a typical image). The goal at this stage is to reduce our large input vector space to a lower dimensional subspace that can be described be an eigenbasis.  
+            The motivation for using principal component analysis is to find what Turk and Pentland referred to as ``face space\Knote{I think more explanation of face space might help understanding},'' and which in our case we can conceptualize as the data space of letters. The face images, as previously explained, live as vectors in large dimensional spaces ($65,536$-dimensional \Knote{We certainly do not want to work with that!} space for a typical image). The goal at this stage is to reduce our large input vector space to a lower dimensional subspace that can be described be an eigenbasis.  
     
             \dfn{Covariance}{
-                In order to construct... we need to define the \textbf{covariance}. Covariance measures the overall correlation between certain variables. The covariance $\sigma$ of two variables, $X$ and $Y$, is defined
+                In order to construct... we need to define the \textbf{covariance}.  Covariance measures the overall correlation between certain variables. The covariance $\sigma$ of two variables, $X$ and $Y$, is defined
                     \[\sigma(X,Y) = \frac{1}{M} \sum _{i=1}^{M} (X_i-\IAmean{X}) (Y_i-\IAmean{Y})\]
             }
+            \Knote{is this also kinda defined in chapter 2?}
     
             \dfn{Covariance Matrix}{
                 \textbf{Covariance matrix}, then, is a matrix that measures the covariance of various variables.
@@ -300,13 +301,13 @@
                 where $\sigma_{ij}$ represents the covariance between the $i^{th}$ and $j^{th}$ variable. In the case of eigenfaces, the $p$ independent variables correspond to our $N^{2}$ bits, and thus $p$ corresponds to the dimension of our images. 
             }
             
-            Having thus defined our covariance matrix, we must now discuss why we are taking the eigenvectors of this particular matrix to be our eigenfaces. In order for out eigenfaces to be as efficient as possible, we want we want each eigenface to encode as much variance as possible. 
+            Having thus defined our covariance matrix, we must now discuss why we are taking the eigenvectors of this particular matrix to be our eigenfaces. In order for our eigenfaces to be as efficient as possible, we want each eigenface to encode as much variance as possible. 
             
             We take eigenvectors to simplify a relation defined by matrix multiplication to a relation defined by scalar multiplication, so that we may write any face as a linear combination of eigenvectors. Taking an eigenvector $e$, $C e = \lambda e$. If $\lambda$ is large, then the covariance between $e$ and all many other faces is high. If $\lambda$ is small, then the covariance is less. Therefore, we will see later that we want to prioritize large eigenvalues when constructing our eigenbasis. 
             
             Before we discuss the eigenvalues, however, we must derive some more definitions of $C$.
             
-            Firstly, given the large size of $N^2$, it is convenient for us to find a more condensed description of the covariance matrix
+            Firstly, given the large size of $N^2$ \Knote{Is this N previously defined} , it is convenient for us to find a more condensed description of the covariance matrix
     
             \thm{}{
                 Let $C$ be a $p \times p$ covariance matrix where each element $c_{ij} = \sigma_{ij}$. Let $\Phi_a = P_a - \IAmean{P}$, where
@@ -493,11 +494,13 @@
                 \Gamma_i = \sum_{n=1}^M c_{in} u_{n}
             \]
     
-            We can interpret the eigenvectors of the covariance matrix as vectors that encode the greatest variance in data, and as such are the most suited for reconstructing faces from (ghosts). The corresponding eigenvalues tell how much variance each eigenvector encodes. For this reason, the greater the eigenvalue the more adaptable and better suited the eigen vector. When choosing eigenvectors to form a basis for the eigenspace used for facial reckognition, one therefore prioritizes them by eigenvalue from highest to lowest.
+            We can interpret the eigenvectors of the covariance matrix as vectors that encode the greatest variance in data, and as such are the most suited for reconstructing faces from (ghosts). The corresponding eigenvalues tell how much variance each eigenvector encodes. For this reason, the greater the eigenvalue the more adaptable and better suited the eigen vector. When choosing eigenvectors to form a basis for the eigenspace used for facial recognition, one therefore prioritizes them by eigenvalue from highest to lowest.
             
             \href{http://math.clarku.edu/\textasciitilde djoyce/ma217/covar.pdf}{AWDAWD}
+            \Knote{This section was a little confusing. I understand that there are still sections missing but I think if it were tied back to the information extraction it would make more sense. Relating it back would kind of answer the question of why we are doing all this simplification and proofs. }
     
     \section{Coding example perhaps?}
+    \Knote{Perhaps, although your document is already quite long.}
     \blindtext
     
     \chapter{Singular Value Decomposition}
