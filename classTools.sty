@@ -493,6 +493,30 @@
 % === Matrices ===
 \newcommand{\IAmatrix}[1]{\begin{bmatrix}#1\end{bmatrix}}
 
+% === Images ===
+\definecolor{pixel 0}{HTML}{000000}
+\definecolor{pixel 1}{HTML}{242424}
+\definecolor{pixel 2}{HTML}{434343}
+\definecolor{pixel 3}{HTML}{656565}
+\definecolor{pixel 4}{HTML}{898989}
+\definecolor{pixel 5}{HTML}{AFAFAF}
+\definecolor{pixel 6}{HTML}{D6D6D6}
+\definecolor{pixel 7}{HTML}{FFFFFF}
+\definecolor{pixel r}{HTML}{FF0000}
+\definecolor{pixel g}{HTML}{00FF00}
+\definecolor{pixel b}{HTML}{0000BB}
+\newcommand{\IApixelimage}[2][2in]{
+    \resizebox{#1}{#1}{%
+        \begin{tikzpicture}
+            \foreach \line [count=\y] in {#2} {
+                \foreach \pix [count=\x] in \line {
+                    \draw[fill=pixel \pix] (\x,-\y) rectangle +(1,1);
+                }
+            }
+        \end{tikzpicture}
+    }
+}
+
 % === Graphs ===
 \usetikzlibrary{positioning,arrows,backgrounds,calc,trees,fit,shapes}
 
@@ -504,7 +528,6 @@
 
 \NewDocumentCommand{\IAgraphnode}{m m m}{
     \node[main] (#1) #3 {#2};
-
 }
 
 \NewDocumentCommand{\IAgraphedge}{m m m m}{

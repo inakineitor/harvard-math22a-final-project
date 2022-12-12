@@ -80,7 +80,7 @@
 
         Morse code, an example of compression, shows how crucial it is to find reliable ways of storing and sharing our information in a way that minimizes space used and maximizes reliability.
     
-    \chapter{Tools for Compression}
+    \chapter{Mathematical Background}
         There are various tools at our disposal that we can use to study and perform data compression and analysis. Many of the common techniques that are used today are the outcome of collaboration between scientists and engineers focused on different branches of Math, such as Probability, Statistics, Information Theory, and Linear Algebra.
         
         While we have focused on Linear Algebra this semester, it is necessary to know some introductory concepts from these other branches to understand basic data compression. In this section we will introduce these branches and explain some of their basic concepts.
@@ -346,12 +346,101 @@
     
     \chapter{Principal Component Analysis}
         \section{Extract ``high information'' regions in the data space}
-            \Inote{Use our variance knowledge from example image to say that some sections of the image have less information (the constant ones) and some have more information (the ones that vary widely)}
+            In this chapter we will see how we can use the knowledge from Chapter 2 to find efficient representations for arbitrary data, and apply that to the challenge introduced in Chapter 3.
+
+            Data in its raw or most simple representation is likely to the potential to store many more values than we actually care about. For example, in the case of character recognition, lets say that the dataset that we have for each handwritten character consists a 28x28 pixel grayscale images.
+
             \begin{figure}[H]
                 \centering
                 \includegraphics[width=0.7\textwidth]{mnist-handwriting-dataset.jpg}
                 \caption{\label{fig:mnist-handwriting-dataset} Samples of the numbers 5, 0, 4, and 1 from the MNIST handwriting dataset.}
             \end{figure}
+
+            Theoretically, with this data space, we can encode signifcantly more than the letters and digits in the English alphabet. An all black or all white image exists in this data space but does not represent any of the glyphs that we care about.
+
+            The aim of data compression is to find a way of reducing the size of our data representation while preserving the ability to reconstruct the information in the original uncompressed data space at will.
+
+            In the case of the alphabet and humans, it is quite straight forward. A person can read a character, store it in the computer as a numerical value (0-9 for `0'-`9' and 10-35 for `a'-`z'), and then when we want an image again, a human can write the digit out. But this techinque is very restricted. It can only be applied to the digit the characters the human is able to remember and that we had previously encoded as a numeric value. If the person sees a new digit they do not recognize, there is no way of storing this information using this compression format.
+
+            We need to establish a system that is able to solve this problem, that can be performed by computers without human intervention, and that can encode more than a predefined set of discrete values (ideally a continuous spectrum of variables).
+
+            A common techinque that has these capabilities is calles Principal Component Analysis (PCA). At a high level, it consists of finding patterns in the data (called components) and creating a system that allows us to express a datapoint in a our original data space in terms of how much of each component appears in that point.
+
+            \ex{Compressing image of plaid patterns}{
+                In this example, we will look at a set of images that consists of plaid patterns and see how PCA can be useful in reducing the amount of data it takes to store these.
+            }
+
+            
+
+            \begin{figure}[H]
+                \centering
+                \begin{minipage}{0.2\textwidth}
+                    \centering
+                    \IApixelimage[1.25in]{
+                        {3,5,5,5,5,5,5,3},
+                        {5,7,7,7,7,7,7,5},
+                        {5,7,7,7,7,7,7,5},
+                        {5,7,7,7,7,7,7,5},
+                        {5,7,7,7,7,7,7,5},
+                        {5,7,7,7,7,7,7,5},
+                        {5,7,7,7,7,7,7,5},
+                        {3,5,5,5,5,5,5,3}%
+                    }
+                    Image 1
+                    \label{fig:plaid_img_1}
+                \end{minipage}
+                \begin{minipage}{0.2\textwidth}
+                    \centering
+                    \IApixelimage[1.25in]{
+                        {7,5,7,7,7,7,5,7},
+                        {5,3,5,5,5,5,3,5},
+                        {7,5,7,7,7,7,5,7},
+                        {7,5,7,7,7,7,5,7},
+                        {7,5,7,7,7,7,5,7},
+                        {7,5,7,7,7,7,5,7},
+                        {5,3,5,5,5,5,3,5},
+                        {7,5,7,7,7,7,5,7}%
+                    }
+                    Image 2
+                    \label{fig:plaid_img_2}
+                \end{minipage}
+                \begin{minipage}{0.2\textwidth}
+                    \centering
+                    \IApixelimage[1.25in]{
+                        {7,7,5,7,7,5,7,7},
+                        {7,7,5,7,7,5,7,7},
+                        {5,5,3,5,5,3,5,5},
+                        {7,7,5,7,7,5,7,7},
+                        {7,7,5,7,7,5,7,7},
+                        {5,5,3,5,5,3,5,5},
+                        {7,7,5,7,7,5,7,7},
+                        {7,7,5,7,7,5,7,7}%
+                    }
+                    Image 3
+                    \label{fig:plaid_img_3}
+                \end{minipage}
+                \begin{minipage}{0.2\textwidth}
+                    \centering
+                    \IApixelimage[1.25in]{
+                        {7,7,7,5,5,7,7,7},
+                        {7,7,7,5,5,7,7,7},
+                        {7,7,7,5,5,7,7,7},
+                        {5,5,5,3,3,5,5,5},
+                        {5,5,5,3,3,5,5,5},
+                        {7,7,7,5,5,7,7,7},
+                        {7,7,7,5,5,7,7,7},
+                        {7,7,7,5,5,7,7,7}%
+                    }
+                    Image 4
+                    \label{fig:plaid_img_4}
+                \end{minipage}%
+            \end{figure}
+
+            We can 
+
+            In the case of handwriting, many people write digits in different ways, but 
+                
+            \Inote{Use our variance knowledge from example image to say that some sections of the image have less information (the constant ones) and some have more information (the ones that vary widely)}
         \section{Quantify the intuitive findings from the information theory subsection}
             \Inote{If we write about info theory write the entropy of the regions of the image here}
         
