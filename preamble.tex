@@ -358,7 +358,7 @@
 
 \newtcbtheorem[number within=section]{Example}{Example}
 {%
-	opacityfill=0,
+	,opacityfill=0,
 	,breakable
 	,coltitle = black
 	,detach title
@@ -621,6 +621,7 @@
 				},
 		},
 	#1,
+	bottom=2mm % TODO Investigate why the default is removing the bottom padding
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

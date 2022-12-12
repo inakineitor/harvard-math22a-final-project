@@ -82,7 +82,7 @@
                     If we flip a coin then the sample space is $S = \{\text{Heads}, \text{Tails}\}$.
                 }
                 \ex{Rolling a die}{
-                    If we roll a 6-sided die the sample space is $S = \{1, 2, 3, 4, 5, 6\}$.
+                    If we roll a single 6-sided die the sample space is $S = \{1, 2, 3, 4, 5, 6\}$.
                 }
                 
             \subsection{Events}
@@ -91,28 +91,35 @@
                 }
                 \ex{Rolling a die}{
                     For example, in the 6-sided die example let $M$ be the event we roll a 4 or greater. Then $M = \{4, 5, 6\} \subseteq S$.
+                    
+                    \smallskip In this experiment we state that we are rolling the die once, so we cannot make any statements about what happens if you first roll something, and the something else. In that case, once would have to redefine the experiment to say that each die roll has possibilities $R = \{1, 2, 3, 4, 5, 6\}$ and the total experiment with $n$ roles has sample space $S = R^n$.
                 }
 
             \subsection{Probability}
                 \dfn{Probability}{
-                    The \textbf{probability} of an event (denote $P(M)$ for an event $M$) is the measure of how likely the event is to occur as the outcome of a random experiment.
-
-                    Probability is measured out of 1, which means that events certain to occur have a probability of 1 and events that will never occur have a probability of 0. 
-                    
-                    Naturally, the probability of the sample space $P(S) = 1$, since, by definition, the outcome of the experiment must be one in the sample space.
+                    The \textbf{probability} of an event (denote $P(M)$ for an event $M$) is the measure of how likely the event is to occur as the outcome of a random experiment. It is the sum of the probabilities of each element of the set being the outcome of the performed experiment.
                 }
+
+                Probability is measured out of 1, which means that events certain to occur have a probability of 1 and events that will never occur have a probability of 0.
+
+                Since the sample space contains all the possible outcomes for the experiment, it is guaranteed that one the sample space's elements will be the outcome of the experiment, so \[P(S) = 1\].
             
             \subsection{Random Variables}
                 \dfn{Random Variables}{
-                    \textbf{Random variables} (also r.v.'s) are functions that map the outcome of a random experiment (in the sample space) to a measurable quantity (e.g., real number) or a mathematical object. When the experiment is performed, and the outcome is mapped to a value, we say the random variable ``crystallizes'' to that value. The set of all values a random variable crystallizes to is called the support, denoted $R_X$ for a r.v. $X$. A specified random variable crystallizing to a certain value is an event.
+                    \textbf{Random variables} (also r.v.'s) are functions that map the outcome of a random experiment (in the sample space) to a measurable quantity (e.g., real number) or a mathematical object (e.g., matrix).
                 }
-                \nt{
-                    We normally denote random variables with capital letters and their crystallized values with lower case letters.
-                }
+
+                When the experiment is performed, and the outcome is mapped to a value, we say the random variable ``crystallizes'' to that value. The set of all values a random variable crystallizes to is called the support, denoted $R_X$ for a r.v. $X$. A specified random variable crystallizing to a certain value is an event.
+
+                We normally denote random variables with capital letters and their crystallized values with lower case letters.
+
                 \ex{Flipping a coin}{
                     Let us flip a fair coin with equal probabilities of landing heads or tails. The sample space is then $S = \{H, T\}$ with $P(\{H\}) = P(\{T\}) = 0.5$.
 
-                    Let $X$ be a random variable that crystallizes to -1 if the coin lands Heads and to 1 if the coin lands Tails. Then $X = -1$ and $X = 1$ are events and we write $P(X = -1) = P(\{H\})$ and $P(X = 1) = P(\{T\})$.
+                    \smallskip Let $X$ be a random variable that crystallizes to -1 if the coin lands Heads and to 1 if the coin lands Tails. Then $(X = -1)$ and $(X = 1)$ are events and we write $P(X = -1) = P(\{H\})$ and $P(X = 1) = P(\{T\})$.
+
+                    \smallskip If we where to write the probability function for $X$, where $x$ is the crystallized value that $X$ takes, we would get
+                        \[P(X = x) = \begin{cases} 0.5 & \text{if } x = -1 \\ 0.5 & \text{if } x = 1 \end{cases}\]
                 }
 
             \subsection{Expectation}
