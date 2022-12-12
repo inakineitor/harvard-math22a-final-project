@@ -11,8 +11,19 @@
 \input{macros}
 \input{letterfonts}
 
+% TODO THINGS TO UPDATE
+\pgfplotsset{compat=1.10}
+
+\usepgfplotslibrary{fillbetween}
+
 \hfuzz=10.0pt
 \usepackage[parfill,indent]{parskip} % Removes paragraph indentation and adds space between paragraphsimage.png
+
+\pgfmathdeclarefunction{gauss}{3}{%
+  \pgfmathparse{1/(#3*sqrt(2*pi))*exp(-((#1-#2)^2)/(2*#3^2))}%
+}
+
+% TODO END OF THINGS TO UPDATE
 
 %\title{\Huge{Some Class}\\Random Examples}
 %\author{\huge{Your Name}}
@@ -140,14 +151,79 @@
                     \smallskip The expected value of $X$ is then
                         \[\IAexpected(X) = \sum_{x \in R_X} x \cdot P(X = x) = \frac{1}{6} \cdot 1 + \frac{1}{6} \cdot 2 + \frac{1}{6} \cdot 3 + \frac{1}{6} \cdot 4 + \frac{1}{6} \cdot 5 + \frac{1}{6} \cdot 6 = \frac{21}{6} = 3.5\]
                 }
-
-            \Inote{Remove any of these definitions if they are not needed during the paper}
             
             \subsection{Variance}
                 \dfn{Variance}{
                     \textbf{Variance} is a measure of spread. It measures how far the values in the support of an r.v. are to the mean. For a r.v. $X$ we denote its variance as $\var(X)$. The formula for variance is
                         \[\var(X) = \IAexpected(X^2) - [\IAexpected(X)]^2\]
                 }
+
+                Below is a graphical comparison of between the probability function of a low variance r.v. $X$ and the probability function of a high variance r.v. $Y$. The horizontal axis indicates a value in the support of the random variable and the vertical axis indicates the probability of the random variable taking that value.
+
+                \begin{figure}[H]
+                    \centering
+                    \begin{minipage}{0.45\textwidth}
+                        \centering
+                        \begin{tikzpicture}
+                            \begin{axis}[
+                                width=3.25in,
+                                height=2.25in,
+                                xmin=-1,
+                                xmax=5,
+                                ymin=-0.1,
+                                ymax=0.5,
+                                axis lines=middle,
+                                xlabel={$x$},
+                                ylabel={$P(X=x)$},
+                                samples=50]
+                                \addplot [name path=f, very thick,blue!75!black] {gauss(x, 2.5, 1)};
+                                \path[name path=axis] (axis cs:-1,0) -- (axis cs:5,0);
+                                \addplot [
+                                    thick,
+                                    color=blue,
+                                    fill=blue, 
+                                    fill opacity=0.1
+                                ]
+                                fill between[
+                                    of=f and axis,
+                                ];
+                            \end{axis}
+                        \end{tikzpicture}
+                        Low Variance
+                        \label{fig:negative_cov}
+                    \end{minipage}
+                    \begin{minipage}{0.45\textwidth}
+                        \centering
+                        \begin{tikzpicture}
+                            \begin{axis}[
+                                width=3.25in,
+                                height=2.25in,
+                                xmin=-1,
+                                xmax=5,
+                                ymin=-0.1,
+                                ymax=0.5,
+                                axis lines=middle,
+                                xlabel={$y$},
+                                ylabel={$P(Y=y)$},
+                                samples=50]
+                                \addplot [name path=f, very thick,blue!75!black] {gauss(x, 2.5, 2)};
+                                \path[name path=axis] (axis cs:-1,0) -- (axis cs:5,0);
+                                \addplot [
+                                    thick,
+                                    color=blue,
+                                    fill=blue, 
+                                    fill opacity=0.1
+                                ]
+                                fill between[
+                                    of=f and axis,
+                                ];
+                            \end{axis}
+                        \end{tikzpicture}
+                        High Variance
+                        \label{fig:zero_cov}
+                    \end{minipage}%
+                \end{figure}
+
                 \dfn{Standard Deviation}{
                     Its cousin, \textbf{standard deviation}, is defined as $\sigma = \sqrt{\var(X)}$, and is used because it is sometimes more practical to express the spread in terms of standard deviation.
                 }
