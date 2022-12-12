@@ -64,9 +64,13 @@
         There has been a lot of improvement hardware-wise in the last couple of decades, which increased the density of our storage systems. However, what if we could improve our information storage density through other, non-physical, means? What if we could store the same amount of ``information'' but with fewer ``bits''? This would allow us to work in parallel with scientists researching physical systems.
         
         This is where data compression comes in. It allows us to store the same amount of ``information'' in less bits, digits, characters, or whatever the most basic unit of storage is in our medium of choice. An early example of compression work is the Morse Code, which was invented in 1838 for use in the telegraph industry. Telegraph bandwidth was scarce, so shorter code words were assigned for common letters in the English alphabet, such as ``e'' and ``t'', that would be sent more often \cite{Wolfram2002}.
+
+        Compression can also be useful for analysis and recognition of data patterns. Suppose that we decided to make a picture for every single letter in the English alphabet, and instead of sending Morse code over a telegraph, we send the all the pixel information for the letter images every time we want to transmit a sentence across the wire. Not only will it take so much longer and waste bandwidth (related to compression), but it would also be way harder to recognize and would be more error prone (people's caligraphy is different from one another). One would have to record all the pixel information for every letter, reconstruct it, and then decide on which letter it is: a computationally hard and intensive task for a computer.
+
+        Morse code, an example of compression, shows how crucial it is to find reliable ways of storing and sharing our information in a way that minimizes space used and maximizes reliability.
     
     \chapter{Tools for Compression}
-        There are various tools at our disposal that we can use to study and perform data compression. Many of the common techniques that are used today are the outcome of collaboration between scientists and engineers focused on different branches of Math, such as Probability, Statistics, Information Theory, and Linear Algebra.
+        There are various tools at our disposal that we can use to study and perform data compression and analysis. Many of the common techniques that are used today are the outcome of collaboration between scientists and engineers focused on different branches of Math, such as Probability, Statistics, Information Theory, and Linear Algebra.
         
         While we have focused on Linear Algebra this semester, it is necessary to know some introductory concepts from these other branches to understand basic data compression. In this section we will introduce these branches and explain some of their basic concepts.
         
@@ -259,9 +263,9 @@
         
             Thus, the task of handwriting recognition is the transcription of handwritten data into a digital format, and this task obviously benefits from data compression. The goal is to process handwritten data electronically with the same or nearly the same accuracy as humans (Gunter, n.d)\Lnote{citation}.
             
-            Basically, handwriting can be divided into two categories, cursive script and printed handwriting. Accuracy is the main problem in handwriting recognition for both categories because of the similar strokes and shapes some letters may possess. The software may have an inaccurate recognition of the letter, considering the possibility of the handwriting being illegible or some other factors (\Lnote{citation}). One notable problem that makes this task difficult especially in cursive handwriting recognition is the fact that there may be no obvious character boundaries (the start and end of a character); compared to printed handwriting, it does not have gaps or spaces between each letter to know the start and stop of recognition per character (\Lnote{citation}). This issue is compounded for languages like Arabic, where cursive is the only form of script and there exist "shortcuts" to further simplify the cursive script and make writing more fluid (e.g. removing the "dots"/accent marks that exist above/below certain letters).
+            Basically, handwriting can be divided into two categories, cursive script and printed handwriting. Accuracy is the main problem in handwriting recognition for both categories because of the similar strokes and shapes some letters may possess. The software may have an inaccurate recognition of the letter, considering the possibility of the handwriting being illegible or some other factors (\Lnote{citation}). One notable problem that makes this task difficult especially in cursive handwriting recognition is the fact that there may be no obvious character boundaries (the start and end of a character); compared to printed handwriting, it does not have gaps or spaces between each letter to know the start and stop of recognition per character (\Lnote{citation}). This issue is compounded for languages like Arabic, where cursive is the only form of script and there exist ``shortcuts'' to further simplify the cursive script and make writing more fluid (e.g. removing the ``dots''/accent marks that exist above/below certain letters).
             
-            This is where the data compression/dimension reduction and eigenface technique comes into play! In essence, if we have a large data set that consists of thousands or even millions of images of words (probably limited to one language), we want to find a way to recognize patterns in these images. From these patterns, we can then determine which ones have the most “importance” and attempt to express these images as a weighted combination of these most important patterns (and thus in a lower dimension).
+            This is where the data compression/dimension reduction and eigenface technique comes into play! In essence, if we have a large data set that consists of thousands or even millions of images of words (probably limited to one language), we want to find a way to recognize patterns in these images. From these patterns, we can then determine which ones have the most ``importance'' and attempt to express these images as a weighted combination of these most important patterns (and thus in a lower dimension).
         
     
     \chapter{Principal Component Analysis}
@@ -279,11 +283,12 @@
             \Lnote{change wording so that this applies to handwriting recognition instead of face recognition}
             The motivation for using principal component analysis is to find what Turk and Pentland referred to as ``face space\Knote{I think more explanation of face space might help understanding},'' and which in our case we can conceptualize as the data space of letters. The face images, as previously explained, live as vectors in large dimensional spaces ($65,536$-dimensional \Knote{We certainly do not want to work with that!} space for a typical image). The goal at this stage is to reduce our large input vector space to a lower dimensional subspace that can be described be an eigenbasis.  
     
+            \Knote{is this also kinda defined in chapter 2?}
+
             \dfn{Covariance}{
                 In order to construct... we need to define the \textbf{covariance}.  Covariance measures the overall correlation between certain variables. The covariance $\sigma$ of two variables, $X$ and $Y$, is defined
                     \[\sigma(X,Y) = \frac{1}{M} \sum _{i=1}^{M} (X_i-\IAmean{X}) (Y_i-\IAmean{Y})\]
             }
-            \Knote{is this also kinda defined in chapter 2?}
     
             \dfn{Covariance Matrix}{
                 \textbf{Covariance matrix}, then, is a matrix that measures the covariance of various variables.
