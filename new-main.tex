@@ -124,8 +124,17 @@
 
             \subsection{Expectation}
                 \dfn{Expectation}{
-                    The \textbf{expectation} of a random variable $X$ with, denoted $\IAexpected(X)$ is the the average value that the random variable will hold weighted by the probability of the variable crystallizing to that value. If there is no ambiguity over what variable we are taking about, we use the letter $\mu = \IAexpected(X)$. Its formula is
+                    The \textbf{expectation} (also called the mean) of a random variable $X$, denoted $\IAexpected(X)$, is the weighted average of the values that $X$ can take. The weight for a value $x$ is determined by the probability of $X$ crystallizing to that value.
+                    
+                    \smallskip We also write the variable with a bar on top to represent its mean. Its formula is
                         \[\IAmean{X} = \IAexpected(X) = \sum_{x \in R_X} x \cdot P(X = x)\]
+                }
+
+                \ex{Rolling a die}{
+                    Expanding on the previous example of rolling a 6-sided die once. Let $X$ be a random variable that crystallizes to the number rolled. Then $R_X = \{1, 2, 3, 4, 5, 6\}$ and $P(X = x) = \frac{1}{6}$ for all $x \in R_X$, since each number has the same probability of being rolled.
+
+                    \smallskip The expected value of $X$ is then
+                        \[\IAexpected(X) = \sum_{x \in R_X} x \cdot P(X = x) = \frac{1}{6} \cdot 1 + \frac{1}{6} \cdot 2 + \frac{1}{6} \cdot 3 + \frac{1}{6} \cdot 4 + \frac{1}{6} \cdot 5 + \frac{1}{6} \cdot 6 = \frac{21}{6} = 3.5\]
                 }
 
             \Inote{Remove any of these definitions if they are not needed during the paper}
