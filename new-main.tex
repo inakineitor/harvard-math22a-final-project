@@ -326,16 +326,10 @@
                 \end{figure}
                 
                 If covariance is 0, we say that variables are ``uncorrelated'', and we interpret it as there being no linear relationship between the two.
-            
-        
-        \section{Information Theory (maybe could be skipped)}
-        % ===== Put the brief history here =====
-        \subsection{Strictly required math/algebra information theory background}
-            \Inote{Fill out with definitions or content if it is needed for our future proofs}
     
     \chapter{Start of the Story: What do we want to compress?}
         \section{Handwriting Recognition}
-            Communication is an essential part of relating to people, and one of the oldest and most accessible methods of communication within a given language is writing by hand. In spite of the major effort that has been expended to bring about a paper-free society, a very large number of paper-based documents are processed daily by computers all over the world in order to handle, retrieve, and store information. The problem is that the manual process used to enter the data from these documents into computers demands a great deal of time and money (Bortolozzi, de Souza Britto Jr., Oliveira and Morita, n.d.)\Lnote{put in citation later}. These documents may need to be processed for a number of reasons \Knote{Here you write that these documents may need to be processed for a number of reasons, but go on to explain the type of documents that are processed. The reader might expect to see the reasons for converting documents and not the type of documents processed.}, among them historical documentation (e.g. digitally documenting culturally and historically significant documents and scripts, which until recently were more often than not handwritten or on print paper), recognition for medical prescriptions, or for tablet \Knote{this last part of the sentence is a little confusing to me as to how it relates to the previous section of the sentence} soft-wares to convert user's handwriting into digital text.
+            Communication is an essential part of relating to people, and one of the oldest and most accessible methods of communication within a given language is writing by hand. In spite of the major effort that has been expended to bring about a paper-free society, a very large number of paper-based documents are processed daily by computers all over the world in order to handle, retrieve, and store information. The problem is that the manual process used to enter the data from these documents into computers demands a great deal of time and money (Bortolozzi, de Souza Britto Jr., Oliveira and Morita, n.d.)\Lnote{put in citation later}. These documents may need to be processed for a number of reasons, including historical record keeping, such as documenting significant social and political events. \Knote{Here you write that these documents may need to be processed for a number of reasons, but go on to explain the type of documents that are processed. The reader might expect to see the reasons for converting documents and not the type of documents processed.}, among them historical documentation (e.g. digitally documenting culturally and historically significant documents and scripts, which until recently were more often than not handwritten or on print paper), recognition for medical prescriptions, or for tablet \Knote{this last part of the sentence is a little confusing to me as to how it relates to the previous section of the sentence} soft-wares to convert user's handwriting into digital text.
         
             Thus, the task of handwriting recognition is the transcription of handwritten data into a digital format, and this task obviously benefits from data compression. The goal is to process handwritten data electronically with the same or nearly the same accuracy as humans (Gunter, n.d)\Lnote{citation}.
             
@@ -1275,28 +1269,22 @@
             \href{http://math.clarku.edu/\textasciitilde djoyce/ma217/covar.pdf}{AWDAWD}
             \Knote{This section was a little confusing. I understand that there are still sections missing but I think if it were tied back to the information extraction it would make more sense. Relating it back would kind of answer the question of why we are doing all this simplification and proofs. }
     
-    \section{Coding example perhaps?}
-    \Knote{Perhaps, although your document is already quite long.}
-    \blindtext
-    
-    \chapter{Singular Value Decomposition}
-    \section{Explain how an alternative way to look at this is through SVD}
-    
-    \chapter{Uses with Compression}
-    \section{XYZ storage}
-    \blindtext[1]
-    \section{images (medical, handrwiting, S\\XYZ), sound (voice recognition)}
-    \blindtext[1]
-    
-    \chapter{Uses to optimize and enable new kinds of algorithms (fingerprint detection)}
-    \section{XYZ recognition}
-    \blindtext[1]
-    \section{Facial and handrwiting detection algorithms, voice recognition algorithms}
-    \blindtext[1]
+    \chapter{Uses Beyond Compression}
+    We mainly discussed how PCA allows us to reduce the dimensions of our data space and store data more efficiently, but there are more uses for this beyond compression. Having a simpler representation for our data allows us to perform more complex operations on it.
 
-    \chapter{Discussion}
-    \section{Is this software Anglo-centric?}
-    \blindtext[1]
+    \section{Classification}
+    We can use PCA to perform classification on our data. After we have chosen our eigenvectors based on our initial dataset, and have manually classified the original ``training'' data into categories, we can use Linear Classification \cite{Milon2019} to classify new data into the preexisting categories.
+
+    This process consists of projecting the new datapoint to our lower-dimension subspace and then making a category decision based on how much weight each basis vector has in the new datapoint.
+
+    \section{Recognition}
+    In cases were there are no discrete categories defined during training time, we can use dimensionality reduction to more easily (and faster) compare a new datapoint to a list of known datapoints that continually gets updates.
+
+    In the case of facial recognition, we can use PCA to reduce the dimensionality of our data and then use a distance metric to compare the new datapoint to the known datapoints. The datapoint with the smallest distance to the new datapoint is the most similar and is therefore the most likely to be the same person.
+
+    % \chapter{Discussion}
+    % \section{Is this software Anglo-centric?}
+    % \blindtext[1]
     
     \pagebreak
     
