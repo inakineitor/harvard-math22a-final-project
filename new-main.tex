@@ -1045,66 +1045,120 @@
             \Inote{Use our variance knowledge from example image to say that some sections of the image have less information (the constant ones) and some have more information (the ones that vary widely)}
         
         \section{Formalizing the calculation of ``high information'' eigenvectors}
-            \Lnote{change wording so that this applies to handwriting recognition instead of face recognition}
-            The motivation for using principal component analysis is to find what Turk and Pentland referred to as ``face space\Knote{I think more explanation of face space might help understanding},'' and which in our case we can conceptualize as the data space of letters. The face images, as previously explained, live as vectors in large dimensional spaces ($65,536$-dimensional \Knote{We certainly do not want to work with that!} space for a typical image). The goal at this stage is to reduce our large input vector space to a lower dimensional subspace that can be described be an eigenbasis.  
-    
-            \Knote{is this also kinda defined in chapter 2?}
+            How can we use the knowledge we gained form principal component analysis, along with out linear algebra skills, to come up with an algorithm for object recognition?
 
-            \dfn{Covariance}{
-                In order to construct... we need to define the \textbf{covariance}.  Covariance measures the overall correlation between certain variables. The covariance $\sigma$ of two variables, $X$ and $Y$, is defined
-                    \[\sigma(X,Y) = \frac{1}{M} \sum _{i=1}^{M} (X_i-\IAmean{X}) (Y_i-\IAmean{Y})\]
+            The answer lies in an 1987 paper written by L. Sirbovich and M. Kirby, followed by the work of Matthew A. Turk and Alex P. Pentland, mathmaticians who invented the method of ``eigenfaces'' \cite{Turk1991}. One of the earlies face detection methods, eigenfaces use rather simpler math to acieve remarkale data compression that allow for mathematical descriptions of low dimensional images.
+
+            Let us walk through the process of creatign eigenfaces and discover their utility. As we will see later, our method will generalize nicely to characterizing other detectable objects. We start with a training set of $M$ images of faces. The larger the training set, the greater the precision of the algorithm. Each image in the training set must the same resolution. In this case we will take them to be $N \times N$ pixels ($N$ height and $N$ width) without loss of generality. Our goal is to represent each face as a vector, and we do this by placing the $N$ columns into one single column vector of $N^2$ dimensions. Each pixel in this arrangement is a variable of $8$ \Inote{Ask Adam to check because you make 256 values, not 8, with 8 bits. Maybe it's 3 bits?} possible color values, and our image is called an 3-bit image.
+
+            \ex{Low Resolution}{
+                Consider an extremely low resolution $2 \times 2$ pixel image. We can represent this image as $2 \times 2$ matrix $A$, defined
+                    \[
+                        A = \IAmatrix{
+                            1 & 6 \\
+                            3 & 8
+                        }
+                    \]
             }
-    
+
+            Since each pixel has 8 possile values that define its color, each entry in $A$ has some value between and 8. We now change $a$ into a four dimensional vector $\vec{v}$ such that
+                    \[
+                        \vec{v} = \IAmatrix{
+                            1 \\
+                            3 \\
+                            6 \\
+                            8
+                        }
+                    \]
+
+            Notice that this operation does not change the information contained in each image, it simply gives us an object that is easier to work with. Doing this operation on each of our $M$ images, we can now call refer to the $i^{th}$ face vector as $\Gamma_i$, where $1 \leq i \leq M$. Having defined our vectors, let us turn to principal component analysis.
+
+            The motivation for using principal component analysis is to find what mathmaticians Turk and Pentland refered to as ``face space.'' The face vectors live in large dimensional spaces ($65,536$-dimensional space for a typical image from their paper \cite{Turk1991}). The goal at this stage is to reduce our large input vector space to a lower dimensional subspace. We will do this by taking the eigenvectors of a covaraince matrix. From there, we will be able to write any face as a linear combination of these eigenvectors.
+
+            In defining this matrix, let us revisit our definition of covariance and adapt it from a mathematically defined random variable to one comprised of samples.
+
+            \dfn{Sample Covariance}{
+                In order to construct the covariance matrix, we need to define \textbf{covariance} for samples of random variable that holds some true distribution that we lack knowledge of.
+                
+                \smallskip Let $\sigma(X, Y)$ be the covaraince between r.v.'s $X$ and $Y$, and let $X_i$ be the $i^{th}$ sample of the $X$ random variable, and $\IAmean{X}$ the sample mean (weighted average value of r.v. based on number of appearances in dataset).
+                
+                \smallskip Mathematically, sample covaraince is then defined as
+                    \[
+                        \sigma(X, Y) = \frac{1}{M} \sum_{i=1}^M (X_i - \IAmean{X})(Y_i - \IAmean{Y})
+                    \]
+            }
+
             \dfn{Covariance Matrix}{
-                \textbf{Covariance matrix}, then, is a matrix that measures the covariance of various variables.
-                
-                For variables $x_1,\ldots,x_p$, the covariance matrix is defined as follows
-                \[
-                    C = \IAmatrix{
-                        \sigma_{11} & \sigma_{12} & ... & \sigma_{1p} \\
-                        \sigma_{21} & \sigma_{22} &  & \\
-                        \vdots  &  & \ddots  & \\
-                        \sigma_{p1} &  &  & \sigma _{pp}
-                    }
-                \]
-                
-                where $\sigma_{ij}$ represents the covariance between the $i^{th}$ and $j^{th}$ variable. In the case of eigenfaces, the $p$ independent variables correspond to our $N^{2}$ bits, and thus $p$ corresponds to the dimension of our images. 
+                The covariance matrix, then, is a matrix that measures the covariance matrix between each pair of variables. We denote the variables as $x_1,\dots,x_p$. If we have $N^2$ variables, our covariance matrix is a $N^2 \times N^2$ matrix
+                    \[
+                        C = \IAmatrix{
+                            \sigma_{11} & \sigma_{12} & ...    & \sigma_{1p} \\
+                            \sigma_{21} & \sigma_{22} &        &             \\
+                            \vdots      &             & \ddots &             \\
+                            \sigma_{p1} &             &        & \sigma _{pp}
+                        }
+                    \]
+                where the entry $\sigma_{ij}$ represents the covariance between the $i^{th}$ and $j^{th}$ variables.
             }
-            
-            Having thus defined our covariance matrix, we must now discuss why we are taking the eigenvectors of this particular matrix to be our eigenfaces. In order for our eigenfaces to be as efficient as possible, we want each eigenface to encode as much variance as possible. 
-            
-            We take eigenvectors to simplify a relation defined by matrix multiplication to a relation defined by scalar multiplication, so that we may write any face as a linear combination of eigenvectors. Taking an eigenvector $e$, $C e = \lambda e$. If $\lambda$ is large, then the covariance between $e$ and all many other faces is high. If $\lambda$ is small, then the covariance is less. Therefore, we will see later that we want to prioritize large eigenvalues when constructing our eigenbasis. 
-            
-            Before we discuss the eigenvalues, however, we must derive some more definitions of $C$.
-            
-            Firstly, given the large size of $N^2$ \Knote{Is this N previously defined} , it is convenient for us to find a more condensed description of the covariance matrix
-    
-            \thm{}{
-                Let $C$ be a $p \times p$ covariance matrix where each element $c_{ij} = \sigma_{ij}$. Let $\Phi_a = P_a - \IAmean{P}$, where
+
+            In the case of eigenfaces, the $p$ variables correspond to each of the $N^2$ pixels in an image. Thus, $p = N^2$ for our application, where $N$ is the width and height of an image \cite{Janakiev2018}.
+
+            Having defined our covariance matrix, we must now discuss why we are taking the eigenvectors of this particular matrix to be our eigenfaces. The answer lies in the fact that the eigenvectors of the covariance matrix are the directions of maximum variance in the data. In other words, the eigenvectors of the covariance matrix are the directions of maximum information. \Inote{In the future add reference to information theory here and before explain how more variance would naturally lead to more information entropy.}
+
+            We calculate the eigenvectors so that we simplify a relation based on matrix multiplication, to a relation defined by scalar multiplication, so that we may write any face as a lienar combination of eigenvectors.
+
+            Taking an eigenvector $u$, $Cu=\lambda_u u$. Notice that if $\lambda_u$ is large, then the amount of information contained in the direction of $u$ is large. Thus, we can use the eigenvectors of the covariance matrix to represent our faces in a lower dimensional space.
+
+            Eigenfaces are sometimes referred to as ``ghost-like'' images \cite{Dusenberry2015}, given their slightly vague features. Intuitively, we can understand each eigenface as a sort of general face, where a greater eigenvalue implies a more general face. By commining general faces with more specific faces, we can obtain an approximation of any other face (that is reasonably similar to our training set).
+
+            \begin{figure}[H]
+                \centering
+                \includegraphics[width=0.5\textwidth]{eigenfaces.jpg}
+                \caption{Eigenfaces or ``ghosts'' \cite{Dusenberry2015}}
+            \end{figure}
+
+            Before we discuss the eigenvalues, however, we must derive some more properties of $C$ that will ultimately help us condense our data.
+
+            Firstly, given the large size of $N^2$, it is conventient for us to find a more condensed description of the covariance matrix.
+
+            \thm{Reexpression of the Covariance Matrix}{
+                Let $C$ be a $p \times p$ covariance matrix where each matrix entry $c_{ij} = \sigma_{ij}$. Define the variance
+                    \[\Phi_a = P_a - \IAmean{P},\]
+                where
                     \[
                         P_a = \IAmatrix{
                             x_{1a} \\
                             x_{2a} \\
                             \vdots \\
                             x_{pa}
-                        }
+                        }, \quad 1 \leq a \leq M
                     \]
-                with $a$ from $1$ to $M$.
                 
-                Then $C = \frac{1}{M} \sum_{a=1}^M \Phi_a \Phi_a^T$.
-            }
-            \begin{myproof}
-                We can prove this theorem starting with
+                \smallskip Then, the covariance matrix can be written as
                     \[
-                        C = \IAmatrix{
-                            \sigma_{11} & \sigma_{12} & \cdots & \sigma_{1p} \\
-                            \sigma_{21} & \sigma_{22} &        &             \\
-                            \vdots      &             & \ddots &             \\
-                            \sigma_{p1} &             &        & \sigma_{pp}
-                        }
+                        C = \frac{1}{M} \sum_{a=1}^M \Phi_a \Phi_a^T
                     \]
-        
-                From the definition of covariance, each entry $c_{ij} = \frac{1}{M} \sum _{i=1}^M \left( x_{ia} - \IAmean{x_i}\right) \left(x_{ia} - \IAmean{x_i}\right)$. Since matrices add linearly, we can factor out the summation $\frac{1}{M} \sum_{i=1}^M$. Thus we can write
+            }
+
+            Recall that each vector has $N^2$ dimensions, and that our training set has $M$ vectors, hence the two indices. \Inote{It is not clear which to indices we are referring to here.}
+
+            \begin{myproof}
+                We can start the proof of this thoerem with our matrix
+                \[
+                    C = \IAmatrix{
+                        \sigma_{11} & \sigma_{12} & ...    & \sigma_{1p} \\
+                        \sigma_{21} & \sigma_{22} &        &             \\
+                        \vdots      &             & \ddots &             \\
+                        \sigma_{p1} &             &        & \sigma _{pp}
+                    }
+                \]
+
+                From the definition of covariances, each entry \Inote{I'm pretty sure this formula is wrong, $a$ and the single vs. double index if never explained}
+                    \[
+                        c_{ij} = \frac{1}{M} \sum_{i=1}^M \left(x_{ia} - \IAmean{x}_i\right) \left(x_{ia} - \IAmean{x}_i\right)
+                    \]
+                
+                Since matrices add linearly, we can factor out the summation $\frac{1}{M} \sum_{i=1}^M$. Then we can write
                     \[
                         C = \frac{1}{M} \sum_{i=1}^M \IAmatrix{
                             \left(x_{1a} - \IAmean{x}_1\right) \left(x_{1a} - \IAmean{x}_1\right) & \dotsc  & \left(x_{1a} - \IAmean{x}_1\right) \left(x_{pa} - \IAmean{x}_p\right) \\
@@ -1113,58 +1167,55 @@
                         }
                     \] \Inote{Clarify notation because $\IAmean{x}_p$ is not defined anywhere}
                 
-                
-                Now consider the term $\Phi_a \Phi_a^T = (P_i - \IAmean{P}) (P_i - \IAmean{P})^T$, as defined in the theorem. Since the transpose operator is distributive,
-                    \[
-                        (P_i - \IAmean{P}) (P_i - \IAmean{P})^T =
-                            \left(
-                                \IAmatrix{
-                                    x_{1a} \\
-                                    x_{2a} \\
-                                    \vdots \\
-                                    x_{pa}
-                                } - \IAmean{P}
-                            \right) \left(
-                                \IAmatrix{
-                                    x_{1i} & x_{2i} & \dotsc & x_{pi}
-                                } - \IAmean{P}^T
-                            \right)
-                    \]
-                    \[
-                        =
-                            \left(
-                                \IAmatrix{
-                                    x_{1a} \\
-                                    x_{2a} \\
-                                    \vdots \\
-                                    x_{pa}
-                                } - \IAmatrix{
-                                    \IAmean{x}_1 \\
-                                    \IAmean{x}_2\\
-                                    \vdots \\
-                                    \IAmean{x}_p
-                                }
-                            \right) \left(
-                                \IAmatrix{
-                                    x_{1a} & x_{2a} & \dotsc & x_{pa}
-                                } - \IAmatrix{
-                                    \IAmean{x}_1 & \IAmean{x}_2 & \dotsc & \IAmean{x}_p
-                                }
-                            \right)
-                    \]
-                    \[
-                        =
+                Now consider the term $\Phi_a \Phi_a^T = (P_i - \IAmean{P})(P_i - \IAmean{P})^T$, as defined in the theorem. Since the transpose operator is distributive,
+                \begin{gather*}
+                    (P_i - \IAmean{P})(P_i - \IAmean{P})^{T} =
+                        \left(
                             \IAmatrix{
-                                x_{1a} - \IAmean{x}_1 \\
-                                x_{2a} - x_2 \\
+                                x_{1a} \\
+                                x_{2a} \\
                                 \vdots \\
-                                x_{pa} - \IAmean{x}_p
-                            }
+                                x_{pa}
+                            } - \IAmean{P}
+                        \right)
+                        \left(
                             \IAmatrix{
-                                x_{1a} - \IAmean{x}_1 & x_{2a} - \IAmean{x}_2 & \dotsc & x_{pa} -\IAmean{x}_p
-                            }
-                    \]
-                
+                                x_{1i} & x_{2i} & \dotsc & x_{pi}
+                            } - \IAmean{P}^T
+                        \right)
+                    \\
+                    = \left(
+                        \IAmatrix{
+                            x_{1a} \\
+                            x_{2a} \\
+                            \vdots \\
+                            x_{pa}
+                        } - \IAmatrix{
+                            \IAmean{x}_1 \\
+                            \IAmean{x}_2 \\
+                            \vdots \\
+                            \IAmean{x}_p
+                        }
+                    \right)
+                    \left(
+                        \IAmatrix{
+                            x_{1a} & x_{2a} & \dotsc & x_{pa}
+                        } - \IAmatrix{
+                            \IAmean{x}_1 & \IAmean{x}_2 & \dotsc & \IAmean{x}_p
+                        }
+                    \right)
+                    \\
+                    = \IAmatrix{
+                        x_{1a} - \IAmean{x}_1 \\
+                        x_{2a} - \IAmean{x}_2 \\
+                        \vdots \\
+                        x_{pa} - \IAmean{x}_p
+                    } \IAmatrix{
+                        x_{1a} - \IAmean{x}_1 & x_{2a} - \IAmean{x}_2 & \dotsc & x_{pa} - \IAmean{x}_p
+                    }
+                \end{gather*}
+                \Inote{Once again, magic notation}
+
                 Therefore,
                     \[
                         \Phi_a {\Phi_a}^T = \IAmatrix{
@@ -1177,97 +1228,144 @@
                         C = \frac{1}{M} \sum_{a=1}^M \Phi_a {\Phi_a}^T
                     \]
             \end{myproof}
-            
-            By constructing 
-            
-            \href{https://builtin.com/data-science/step-step-explanation-principal-component-analysis}{REFERENCE PRINCIPAL COMPONENT ANALYSIS}
-            
-            In the eigenface case, we wish to measure the difference between our face vectors $\Gamma_i$ differ from the average face. We can define the average face $\IAmean{\Gamma}$ as follows,
+
+            \href{https://builtin.com/data-science/step-step-explanation-principal-component-analysis}{REFERENCE PRINCIPAL COMPONENT ANALYSIS} \Inote{Cite}
+
+            In the eigenface case, we wish to measure the difference between the face vectors $\Gamma_i$ and the average face. We can define the average face $\IAmean{\Gamma}$ as follows,
                 \[
                     \IAmean{\Gamma} = \frac{1}{M} \sum_{n=1}^M \Gamma_n
                 \]
-    
+
             We can write the difference $\Phi_i$ between the average face and the $i^{th}$ face,
                 \[
                     \Phi_i = \Gamma_i - \IAmean{\Gamma}
                 \]
             
             \href{https://nzmaths.co.nz/category/glossary/variance-discrete-random-variable\#:\textasciitilde:text=A\%20measure\%20of\%20spread\%20for,2\%20or\%20\%CF\%832x.}{Hello}
-            
-            \thm{}{
-                Let $C$ be an $N^2 \times N^2$ covariance matrix, defined as $C = \frac{1}{M} \sum_{n=1}^M \Phi_n \Phi_n^T$, where $M$ is the dimension of the domain $C$. Let $A$ be an $N^2 \times N^2$ matrix with columns $[\Phi_1 \ \Phi_2 \ \dots \Phi_M]$.
-                
-                Then $C = A A^T$.
+
+            \thm{Covariance Matrix Calculation}{
+                Let $C$ be an $N^2 \times N^2$ covariance matrix, defined as $C = \frac{1}{M} \sum_{n=1}^M \Phi_n \Phi_n^T$. Let $A$ be an $N^2 \times N^2$ matrix with columns $\IAmatrix{\Phi_1 & \Phi_2 & \cdots & \Phi_M}$. Then $C = AA^T$.
             }
-    
+
             \begin{myproof}
+                Going back to our matrix $C$,
+                    \[
+                        C = \IAmatrix{
+                            \sigma_{11} & \sigma_{12} & \cdots & \sigma_{1p} \\
+                            \sigma_{21} & \sigma_{22} &        &             \\
+                            \vdots      &             & \ddots &             \\
+                            \sigma_{p1} &             &        & \sigma_{pp}
+                        }
+                    \]
                 
+                We can expand $C$ according to the defintiion of $\sigma$,
+                    \[
+                        C = \frac{1}{M} \sum_{a=1}^M \IAmatrix{
+                            \Phi_1 \Phi_1^T & \Phi_1 \Phi_2^T & \cdots & \Phi_1 \Phi_p^T \\
+                            \Phi_2 \Phi_1^T & \Phi_2 \Phi_2^T &        &                 \\
+                            \vdots          &                 & \ddots &                 \\
+                            \Phi_p \Phi_1^T &                 &        & \Phi_p \Phi_p^T
+                        }
+                    \]
+
+                \Inote{I'm not sure how this proves the statement. You didn't begine with the end or begining of theorem.}
             \end{myproof}
+
+            Now we can express our eigenvectors $u_i$ and eigenvalues $\lambda_i$ as
+                \[
+                    \lambda _{i} u_{i} =AA^{T} u_{i}
+                \]
+
+            However, $AA^T$ is an $N^2 \times N^2$ matrix, which for images of any reasonable size is going to be very large.
+
+            Let 
+                \[
+                    S = AA^T = \lambda_i u_i
+                \]
             
-            Going back to our matrix $C$,
-                \[
-                    C = \IAmatrix{
-                        \sigma_{11} & \sigma_{12} & \dots  & \sigma_{1p} \\
-                        \sigma_{21} & \sigma_{22} &        &             \\
-                        \vdots      &             & \ddots &             \\
-                        \sigma_{p1} &             &        & \sigma_{pp}
-                    }
-                \]
-    
-             We can expand $C$ according to the definition of $\sigma$,
-                \[
-                    C = \frac{1}{M} \sum_{a=1}^M \IAmatrix{
-                        \Phi_1 {\Phi_1}^T & \Phi_1 \Phi_2^T   & \dots  & \Phi_1 {\Phi_p}^T \\
-                        \Phi_2 {\Phi_1}^T & \Phi_2 {\Phi_2}^T &        &                   \\
-                        \vdots            &                   & \ddots &                   \\
-                        \Phi_p {\Phi_1}^T &                   &        & \Phi_p {\Phi_p}^T
-                    }
-                \]
-        
-            \Anote{...}
-            
-            Now we can express our eigenvectors $v_{i}$ and eigenvalues $\lambda _{i}$ as
-                \[
-                    \lambda_i v_i = A A^T v_i
-                \]
-    
-            However, $A A^T$ is an $N^2$by $N^2$ matrix (where $N \times N$ is the resolution of the image), which for images of any discernable resolution will be much larger than desired in order to compute its eigenvectors. 
-            
-            Let
-                \[
-                    S = A A^T = \lambda_i v_i
-                \]
-    
             Then,
                 \[
-                    S^T = \left(A A^T\right)^T = A^T A
+                    S^T = (AA^T)^T = A^T A
                 \]
-    
-            We can show that $S$ and $S^{T}$ have the same eigenvalues. 
-            
-            Since the indetity matrix is symmetrical, since the transpose operation is distributive, and since $\det(A) = \det\left(A^T\right)$,
-                \[
-                    \det\left(S^T - \lambda_i I\right) = \det(S - \lambda_i I)^T = \det(S - \lambda_i I)
-                \]
-            and therefore $S$ and $S^T$ have the same eigenvalues.
-            
-            Applying this to our eigenfaces,
+            \Inote{This is wrong, $AA^T$ is symmetrical. Proof: $(AA^T)^T = (A^T)^T (A)^T = AA^T$.}
+
+            We can then show that $S$ and $S^T$ have the same eigenvalues with a short proof.
+
+            \begin{myproof}
+                Since the identity matrix is symmetrical, the transpose operation is distributive, and $\det(A) = \det\left(A^T\right)$,
+                    \[
+                        \det\left(S^T - \lambda_i I\right) = \det\left(\left(S^T - \lambda_i I\right)^T\right) = \det\left(\left(S^T\right)^T - \lambda_i I^T\right) = \det(S - \lambda_i I)
+                    \]
+                Therefore, $S$ and $S^T$ have the same characteristic polynomial and the same eigenvalues.
+                \Inote{This is wrong, the eigenvectors of a matrix and its transpose are not the same}
+            \end{myproof}
+
+            Applying this to out eigenfaces,
                 \[
                     S^T = A^T A = \lambda_i u_i
-                \]
-    
-            The advantage of effectively reordering the $A$ and $A^T$ is that our new matrix $S^T$ is an $M \times M$ matrix. $M$ corresponds to the size of the training set, which in most cases is much smaller than the dimension of the resolution of the image. Therefore, it will be much easier to compute the eigenfaces. We can then write each face as a linear combination of the eigenfaces
+                \] \IAnote{wrong}
+            The advantage of effectively reordering the $A$ and $A^T$ is that out new matrix is $S^T$ is an $M \times M$ matrix. $M$ corresponds to the number of images in the training set, whic in most cases is much smaller than the dimension of the resolution of the image. Therefore we have overcome the main obstacle in our path, and from this point on it will be much easier to compute the eigenfaces.
             
-            \href{https://datascienceplus.com/understanding-the-covariance-matrix/}{MEGAREFERENCE}
+            We can write each face in the training set as a linear combination of our $n$ eigenfaces \Inote{Is $n$ the same as $N$, if so why?}
+                \[
+                    \Gamma_i = c_{i1} u_1 + c_{i2} u_2 + \dots + c_{in} u_n \\
+                    \Gamma_i = \sum_{i=1}^M c_{in} u_n
+                \] \Inote{This is also wrong, you are defining $\Phi_i$, not $\Gamma_i$ with this formula}
+
+            Similarly, we can describe a face image not in the training set as a combination of weights and eigenvectors, by solving the above equation for the weights $c_{i1},\dots,c_{in}$. With this last step we have a complete picture of the facial recognition process.
+
+            We have walked through this process looking for facial recognition capabilities, as that was the historically taken route, but this use of eigenvectors is actually much more general. We can apply this method to a variety of data recognition processes, including the others mentioned in this report.
+
+            Fingerprints, for example, are a very common form of biometric identification. The process of identifying a fingerprint is very similar to the facial recognition process.
             
-            \[
-                \Gamma_i = \sum_{n=1}^M c_{in} u_{n}
-            \]
-    
-            We can interpret the eigenvectors of the covariance matrix as vectors that encode the greatest variance in data, and as such are the most suited for reconstructing faces from (ghosts). The corresponding eigenvalues tell how much variance each eigenvector encodes. For this reason, the greater the eigenvalue the more adaptable and better suited the eigen vector. When choosing eigenvectors to form a basis for the eigenspace used for facial recognition, one therefore prioritizes them by eigenvalue from highest to lowest.
-            
-            \href{http://math.clarku.edu/\textasciitilde djoyce/ma217/covar.pdf}{AWDAWD}
-            \Knote{This section was a little confusing. I understand that there are still sections missing but I think if it were tied back to the information extraction it would make more sense. Relating it back would kind of answer the question of why we are doing all this simplification and proofs. }
+            With fingerprints, images are usually black or white (no gray), so we go from an 8-bit pixel image to a 2-bit pixel image \Inote{This is not how it works. Black and white has 1-bit color depth.}. From there, we follow the same process as we did with facial recognition. We can use eigenvectors to represent ``general fingerprints'', and we can identify new fingerprints by the weights it takes to represent them as a linear combination of eigenvectors. These ``eigen-fingerprints'' can be used as shown for the eigenfaces.
+
+            \begin{figure}[H]
+                \centering
+                \includegraphics[width=0.5\textwidth]{eigenfingerprints.png}
+                \caption{Example eigen-fingerprints and eigen-digitprints; digitprints are simply another form of fingerprint image \cite{Pavesic2022}}
+            \end{figure}
+
+            Notice how these eigen-fingerprints get more detailed and granular as we increase the eighenvalue (in the image higher eigenvalues correspond with lower values of $i$). By combining these eigenvectors, we can recreate any reasonably similar fingerprint. This technology has direct applications in security, where a scanned fingerprint can be projected on to the subspace spanned by the chosen eigenvectors (typically less than the dimension of the original fingerprint image) and compared to a list of weights in the database of approved fingerprints. If the weights are very similar (less than a certain threshold of difference) with a fingerprint in the database, then the access is granted.
+
+            % Example calculation of covariance matrix
+            % \ex{Covariance Matrix}{
+            %     Let us consider a simple example of a covariance matrix. Suppose we have two variables, $x$ and $y$, and we have two samples of each variable. We can represent these variables as
+            %         \[
+            %             \vec{x} = \IAmatrix{
+            %                 1 \\
+            %                 2
+            %             }
+            %         \]
+            %         \[
+            %             \vec{y} = \IAmatrix{
+            %                 3 \\
+            %                 4
+            %             }
+            %         \]
+            %     The sample mean of $x$ is
+            %         \[
+            %             \IAmean{x} = \frac{1}{2} \sum_{i=1}^2 x_i = \frac{1}{2} (1 + 2) = \frac{3}{2}
+            %         \]
+            %     and the sample mean of $y$ is
+            %         \[
+            %             \IAmean{y} = \frac{1}{2} \sum_{i=1}^2 y_i = \frac{1}{2} (3 + 4) = \frac{7}{2}
+            %         \]
+            %     The covariance matrix is then
+            %         \[
+            %             C = \IAmatrix{
+            %                 \sigma_{11} & \sigma_{12} \\
+            %                 \sigma_{21} & \sigma_{22}
+            %             }
+            %         \]
+            %     where $\sigma_{11}$ is the covariance between $x$ and $x$, $\sigma_{12}$ is the covariance between $x$ and $y$, $\sigma_{21}$ is the covariance between $y$ and $x$, and $\sigma_{22}$ is the covariance between $y$ and $y$. We can calculate these values as
+            %         \[
+            %             \sigma_{11} = \frac{1}{2} \sum_{i=1}^2 (x_i - \IAmean{x})(x_i - \IAmean{x}) = \frac{1}{2} \sum_{i=1}^2 (x_i - \frac{3}{2})(x_i - \frac{3}{2}) = \frac{1}{2} \sum_{i=1}^2 (x_i^2 - 3x_i + \frac{9}{4}) = \frac{1}{2} \sum_{i=1}^2 (x_i^2 - 3x_i + \frac{9}{4}) = \frac{1}{2} (1^2 - 3 \cdot 1 + \frac{9}{4} + 2^2 - 3 \cdot 2 + \frac{9}{4}) = \frac{1}{2} (1 - 3 + \frac{9}{4} + 4 - 6 + \frac{9}{4}) = \frac{1}{2} (\frac{9}{4} + \frac{9}{4}) = \frac{9}{2}
+            %         \]
+            %         \[
+            %             \sigma_{12} = \frac{1}{2} \sum_{i=1}^2 (x_i - \IAmean{x})(y_i - \IAmean{y}) = \frac{1}{2} \sum_{i=1}^2 (x_i - \frac{3}{2})(y_i - \frac{7}{2}) = \frac{1}{2} \sum_{i=1}^2 (x_i - \frac{3}{2})(y_i - \frac{7}{2}) = \frac{1}{2} \sum_{i=1}^2 (x_i - \frac{3}{2})(y_i - \frac{7}{2}) =
+            %         \]
+            % }
     
     \chapter{Uses Beyond Compression}
     We mainly discussed how PCA allows us to reduce the dimensions of our data space and store data more efficiently, but there are more uses for this beyond compression. Having a simpler representation for our data allows us to perform more complex operations on it.
