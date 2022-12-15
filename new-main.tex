@@ -52,8 +52,13 @@
     \vspace*{1cm}
     \centerline{\huge\huge Cover Letter}
     \vspace*{1cm}
+    
+    First off, we would like give our sincerest thanks to Kai, our project reader, for his initial feedback on our project proposal and draft, as well as to our peer reviewers (Cole Salvador, Eric Wang, Conan Lu, Connor Yu, Raglan Ward, Ron Nachum, Richard Calvo, Peter Pich, Brave Mugisha) for their thoughtful and insightful advice on how to improve the draft. Some of the main takeaways from the feedback we received was to (1) fill in the missing parts between our sections (i.e. fill in the gaps for the reader so the flow of logic presented in the paper could be fluid and comprehensible), (2) give more detailed explanations and examples for the sections specifically regarding linear algebra and the mathematical tools used to interpret our topic, and (3) add more macro-scale information when necessary, like in the section on Principal Component Analysis, with the aim of setting up a foundation for explaining the math and the motivation behind the calculations and proofs we are trying to show.
+    
+    In regards to the first point of feedback, we addressed this simply by filling in the missing parts, as well as doing some restructuring of the sections. Were we presented with more time or a longer page count, we may have provided some more sections in-between to further lay the foundations for the mathematical concepts at hand. Regarding the second point of feedback, we made sure to add additional examples for section 4, as well as figures to aid the reader's understanding of the definitions, theorems, and proofs. Lastly, with regards to the third point of feedback, we filled in section 4 with some additional background info and explanation of PCA, and also added a secion (section 5) on the bigger-picture ``uses beyond compression.'' The work was divided such that Iñaki did a lot of the Latex formatting (including the beautiful diagrams and definition/theorem tables) as well as the introduction and incorporation of definitions and theorems, the original draft of some of the proofs were written by Adam and then edited by all three members, and then Layan worked on writing-heavy portions as well as incorporating edits/feedback for the proofs.  
 
-    (We will write something here for the final product). Reflect on challenges and successes in the cover letter; what you planned to accomplish but couldn't; show that you put in effort and that you took a lot away from this project; reflect on what you learned while doing this project and how it may have helped you discover a new passion or delve into a passion you already had; thank whoever did your peer review.
+    Potentially the most challenging aspects of figuring out the scope and structure of our paper and attending to the feedback and was first to narrow our topic down enough so that we were not taking on too much (we started off a bit too broad and had to narrow down as we incorporated feedback), and also to simply understand what was actually happening in Principal Component Analysis (for this, we relied on many academic articles and textbook explanations). Finally, we struggled a bit with some of the technicalities for the proof regarding repression of the covariance matrix. However, most of the rough patches were smoothed out through discussion and some back-and-forth about the theorems we were trying to prove. Were we to have more time, we might have refined the proofs a bit or made them a bit longer for clarification of some in-between steps. Additionally, we may have kept one of the sections originally in our draft regarding the ethical, social, and cultural conversations surrounding the work of handwriting analysis, particularly as it relates to and Anglo-centric bias (most studies and software are tailored to the English language/script). On behalf of all three of us, we would like to thank the course staff of Math 22a for an amazing semester--we look forward to continuing more math courses at Harvard!
+    
     
     \pagebreak
     
@@ -329,11 +334,12 @@
     
     \chapter{Start of the Story: What do we want to compress?}
         \section{Handwriting Recognition}
-            Communication is an essential part of relating to people, and one of the oldest and most accessible methods of communication within a given language is writing by hand. In spite of the major effort that has been expended to bring about a paper-free society, a very large number of paper-based documents are processed daily by computers all over the world in order to handle, retrieve, and store information. The problem is that the manual process used to enter the data from these documents into computers demands a great deal of time and money (Bortolozzi, de Souza Britto Jr., Oliveira and Morita, n.d.)\Lnote{put in citation later}. These documents may need to be processed for a number of reasons, including historical record keeping. Up until recently, most of these were handwritten or on print paper. Examples include doctors' prescriptions, government documents, and immigration papers.
-        
-            Thus, the task of handwriting recognition is the transcription of handwritten data into a digital format, and this task obviously benefits from data compression. The goal is to process handwritten data electronically with the same or nearly the same accuracy as humans (Gunter, n.d)\Lnote{citation}.
             
-            Basically, handwriting can be divided into two categories, cursive script and printed handwriting. Accuracy is the main problem in handwriting recognition for both categories because of the similar strokes and shapes some letters may possess. The software may have an inaccurate recognition of the letter, considering the possibility of the handwriting being illegible or some other factors (\Lnote{citation}). One notable problem that makes this task difficult especially in cursive handwriting recognition is the fact that there may be no obvious character boundaries (the start and end of a character); compared to printed handwriting, it does not have gaps or spaces between each letter to know the start and stop of recognition per character (\Lnote{citation}). This issue is compounded for languages like Arabic, where cursive is the only form of script and there exist ``shortcuts'' to further simplify the cursive script and make writing more fluid (e.g. removing the ``dots''/accent marks that exist above/below certain letters).
+            One of the oldest and most accessible methods of communication within a given language is writing by hand. Although in recent years there has been a large effort to make society paper-free, computers still process paper-based documents from all over the world every day in order to handle, retrieve, and store information. An efficiency problem arises, however, from the fact that it requires a lot of time and money to manually enter the data from these documents into computers \cite{Bortolozzi2005}. A solution to this efficiency problem is required, as these documents may continue to need processing for the foreseeable future due to a number of reasons, including historical record keeping. Up until recently, most of these were handwritten or on print paper. Examples include doctors' prescriptions, government documents, and immigration papers.
+        
+            Thus, handwriting recognition is the task of transcribing handwritten data into a digital format, and this task obviously benefits from data compression. The goal is to electronically process handwritten data, and to do so in a manner that achieves the same accuracy as humans \cite{Gunter2005}.
+            
+            Handwriting can essentially be categorized as either print or cursive script, and for both categories, recognition accuracy is the main problem because of the similar strokes and shapes of some letters. Factors such as illegibility of handwriting can yield inaccurate recognition of a letter by the software \cite{Holzinger2012}. Finally, a complicating problem that makes recognition notably difficult (especially for cursive) is the absence of obvious character boundaries; while print handwriting often has gaps and spaces between each letter, this is most often not the case for cursive writing, and so it is hard to know the start and stop of recognition per character \cite{Puigcerver2017}.
             
             This is where the data compression/dimension reduction and eigenface technique comes into play! In essence, if we have a large data set that consists of thousands or even millions of images of words (probably limited to one language), we want to find a way to recognize patterns in these images. From these patterns, we can then determine which ones have the most ``importance'' and attempt to express these images as a weighted combination of these most important patterns (and thus in a lower dimension).
         
@@ -454,7 +460,7 @@
                 \end{minipage}
                 \begin{minipage}{0.1\textwidth}
                     \centering
-                    \IApixelimage[0.65in]{
+                      \IApixelimage[0.65in]{
                         {7,5,7,7,7,7,7,7},
                         {7,5,7,7,7,7,7,7},
                         {7,5,7,7,7,7,7,7},
@@ -1042,49 +1048,49 @@
             
             Our method must take into account how ``important'' these areas of space are to decide whether it is worth reducing our compression efficiency to be able to represent only a few infrequent datapoints.
                 
-            \Inote{Use our variance knowledge from example image to say that some sections of the image have less information (the constant ones) and some have more information (the ones that vary widely)}
+            % \Inote{Use our variance knowledge from example image to say that some sections of the image have less information (the constant ones) and some have more information (the ones that vary widely)}
         
         \section{Formalizing the calculation of ``high information'' eigenvectors}
-            How can we use the knowledge we gained form principal component analysis, along with out linear algebra skills, to come up with an algorithm for object recognition?
+            How can we use the knowledge we gained form principal component analysis, along with our linear algebra skills, to derive an algorithm for object recognition?
 
-            The answer lies in an 1987 paper written by L. Sirbovich and M. Kirby, followed by the work of Matthew A. Turk and Alex P. Pentland, mathmaticians who invented the method of ``eigenfaces'' \cite{Turk1991}. One of the earlies face detection methods, eigenfaces use rather simpler math to acieve remarkale data compression that allow for mathematical descriptions of low dimensional images.
+            The answer lies in an 1987 paper written by L. Sirbovich and M. Kirby, followed by the work of Matthew A. Turk and Alex P. Pentland, mathematicians who invented the method of ``eigenfaces'' \cite{Turk1991}. One of the earlies face detection methods, eigenfaces use rather simple math to achieve remarkable data compression that allow for mathematical descriptions of low-dimensional images.
 
-            Let us walk through the process of creatign eigenfaces and discover their utility. As we will see later, our method will generalize nicely to characterizing other detectable objects. We start with a training set of $M$ images of faces. The larger the training set, the greater the precision of the algorithm. Each image in the training set must the same resolution. In this case we will take them to be $N \times N$ pixels ($N$ height and $N$ width) without loss of generality. Our goal is to represent each face as a vector, and we do this by placing the $N$ columns into one single column vector of $N^2$ dimensions. Each pixel in this arrangement is a variable of $8$ \Inote{Ask Adam to check because you make 256 values, not 8, with 8 bits. Maybe it's 3 bits?} possible color values, and our image is called an 3-bit image.
+            Let us walk through the process of creating eigenfaces and discover their utility. As we will see later, our method will generalize nicely to characterizing other detectable objects. We start with a training set of $M$ images of faces. The larger the training set, the greater the precision of the algorithm. Each image in the training set must have the same resolution. In this case we will take them to be $N \times N$ pixels ($N$ height and $N$ width) without loss of generality. Our goal is to represent each face as a vector, and we do this by placing the $N$ columns into one single column vector of $N^2$ dimensions. Each pixel in this arrangement is a variable of 256 possible color values, and our image is called an 8-bit image (8 bit images are standard, however this process is independent of our choice of $N$ \cite{Turk1991}).
 
             \ex{Low Resolution}{
                 Consider an extremely low resolution $2 \times 2$ pixel image. We can represent this image as $2 \times 2$ matrix $A$, defined
                     \[
                         A = \IAmatrix{
-                            1 & 6 \\
-                            3 & 8
+                            1 & 64 \\
+                            32 & 143
                         }
                     \]
             }
 
-            Since each pixel has 8 possile values that define its color, each entry in $A$ has some value between and 8. We now change $a$ into a four dimensional vector $\vec{v}$ such that
+            Since each pixel has 256 possible values that define its color, each entry in $A$ has some value between 0 and 256. We now change $A$ into a four dimensional vector $\vec{v}$ such that
                     \[
                         \vec{v} = \IAmatrix{
                             1 \\
-                            3 \\
-                            6 \\
-                            8
+                            64 \\
+                            32 \\
+                            143
                         }
                     \]
 
-            Notice that this operation does not change the information contained in each image, it simply gives us an object that is easier to work with. Doing this operation on each of our $M$ images, we can now call refer to the $i^{th}$ face vector as $\Gamma_i$, where $1 \leq i \leq M$. Having defined our vectors, let us turn to principal component analysis.
+            Notice that this operation does not change the information contained in each image, it simply gives us an object that is easier to work with. Doing this operation on each of our $M$ images, we can now call refer to the $a^{th}$ face vector as $\Gamma_a$, where $1 \leq a \leq M$. Having defined our vectors, let us turn to principal component analysis.
 
-            The motivation for using principal component analysis is to find what mathmaticians Turk and Pentland refered to as ``face space.'' The face vectors live in large dimensional spaces ($65,536$-dimensional space for a typical image from their paper \cite{Turk1991}). The goal at this stage is to reduce our large input vector space to a lower dimensional subspace. We will do this by taking the eigenvectors of a covaraince matrix. From there, we will be able to write any face as a linear combination of these eigenvectors.
+            The motivation for using principal component analysis is to find what mathematicians Turk and Pentland referred to as ``face space.'' The face vectors live in large dimensional spaces ($65,536$-dimensional space for a $256$ by $256$ image). The goal at this stage is to reduce our large input vector space to a lower dimensional subspace. We will do this by taking the eigenvectors of a covariance matrix. From there, we will be able to write any face as a linear combination of these eigenvectors.
 
             In defining this matrix, let us revisit our definition of covariance and adapt it from a mathematically defined random variable to one comprised of samples.
 
             \dfn{Sample Covariance}{
                 In order to construct the covariance matrix, we need to define \textbf{covariance} for samples of random variable that holds some true distribution that we lack knowledge of.
                 
-                \smallskip Let $\sigma(X, Y)$ be the covaraince between r.v.'s $X$ and $Y$, and let $X_i$ be the $i^{th}$ sample of the $X$ random variable, and $\IAmean{X}$ the sample mean (weighted average value of r.v. based on number of appearances in dataset).
+                \smallskip Let $\sigma(X, Y)$ be the covaraince between r.v.'s $X$ and $Y$, and let $X_a$ be the $a^{th}$ sample of the $X$ random variable, and $\IAmean{X}$ the sample mean (weighted average value of r.v. based on number of appearances in dataset).
                 
                 \smallskip Mathematically, sample covaraince is then defined as
                     \[
-                        \sigma(X, Y) = \frac{1}{M} \sum_{i=1}^M (X_i - \IAmean{X})(Y_i - \IAmean{Y})
+                        \sigma(X, Y) = \frac{1}{M} \sum_{a=1}^M (X_a - \IAmean{X})(Y_a - \IAmean{Y})
                     \]
             }
 
@@ -1103,25 +1109,25 @@
 
             In the case of eigenfaces, the $p$ variables correspond to each of the $N^2$ pixels in an image. Thus, $p = N^2$ for our application, where $N$ is the width and height of an image \cite{Janakiev2018}.
 
-            Having defined our covariance matrix, we must now discuss why we are taking the eigenvectors of this particular matrix to be our eigenfaces. The answer lies in the fact that the eigenvectors of the covariance matrix are the directions of maximum variance in the data. In other words, the eigenvectors of the covariance matrix are the directions of maximum information. \Inote{In the future add reference to information theory here and before explain how more variance would naturally lead to more information entropy.}
+            Having defined our covariance matrix, we must now discuss why we are taking the eigenvectors of this particular matrix to be our eigenfaces. The answer lies in the fact that the eigenvectors of the covariance matrix are the directions of maximum variance in the data. In other words, the eigenvectors of the covariance matrix are the directions of maximum information. % \Inote{In the future add reference to information theory here and before explain how more variance would naturally lead to more information entropy.}
 
-            We calculate the eigenvectors so that we simplify a relation based on matrix multiplication, to a relation defined by scalar multiplication, so that we may write any face as a lienar combination of eigenvectors.
+            We calculate the eigenvectors so that we simplify a relation based on matrix multiplication, to a relation defined by scalar multiplication, so that we may write any face as a linear combination of eigenvectors.
 
-            Taking an eigenvector $u$, $Cu=\lambda_u u$. Notice that if $\lambda_u$ is large, then the amount of information contained in the direction of $u$ is large. Thus, we can use the eigenvectors of the covariance matrix to represent our faces in a lower dimensional space.
+            Taking an eigenvector $u$, $Cu=\lambda_u u$. Notice that if $\lambda_u$ is large, then the amount of information contained in the direction of $u$ is large. Thus, we can use the eigenvectors of the covariance matrix to represent our faces in a lower dimensional space by discarding the low eigenvalue ones and projecting all images to the subspace spanned by the remaining eigenvectors.
 
-            Eigenfaces are sometimes referred to as ``ghost-like'' images \cite{Dusenberry2015}, given their slightly vague features. Intuitively, we can understand each eigenface as a sort of general face, where a greater eigenvalue implies a more general face. By commining general faces with more specific faces, we can obtain an approximation of any other face (that is reasonably similar to our training set).
+            Eigenfaces are sometimes referred to as ``ghost-like'' images \cite{Dusenberry2015}, given their slightly vague features. Intuitively, we can understand each eigenface as a sort of general face, where a greater eigenvalue implies a more general face. By combining general faces with more specific faces, we can obtain an approximation of any other face (that is reasonably similar to our training set).
 
             \begin{figure}[H]
                 \centering
                 \includegraphics[width=0.5\textwidth]{eigenfaces.jpg}
-                \caption{Eigenfaces or ``ghosts'' \cite{Dusenberry2015}}
+                \caption{"Ghost-like" eigenfaces \cite{Dusenberry2015}}
             \end{figure}
 
             Before we discuss the eigenvalues, however, we must derive some more properties of $C$ that will ultimately help us condense our data.
 
             Firstly, given the large size of $N^2$, it is conventient for us to find a more condensed description of the covariance matrix.
 
-            \thm{Reexpression of the Covariance Matrix}{
+            \thm{Simplified Covariance Matrix}{
                 Let $C$ be a $p \times p$ covariance matrix where each matrix entry $c_{ij} = \sigma_{ij}$. Define the variance
                     \[\Phi_a = P_a - \IAmean{P},\]
                 where
@@ -1140,7 +1146,7 @@
                     \]
             }
 
-            Recall that each vector has $N^2$ dimensions, and that our training set has $M$ vectors, hence the two indices. \Inote{It is not clear which to indices we are referring to here.}
+            Recall that each vector has $N^2$ dimensions, corresponding to pixels, and that our training set has $M$ vectors. The first index $p$ marks the $p^{th}$ pixel, and the second index $a$ marks the $a^{th}$ image in the training set. 
 
             \begin{myproof}
                 We can start the proof of this thoerem with our matrix
@@ -1153,23 +1159,23 @@
                     }
                 \]
 
-                From the definition of covariances, each entry \Inote{I'm pretty sure this formula is wrong, $a$ and the single vs. double index if never explained}
+                For any entry, $c_{ij}=\sigma_{ij}$. From the definition of covariances, each entry 
                     \[
-                        c_{ij} = \frac{1}{M} \sum_{i=1}^M \left(x_{ia} - \IAmean{x}_i\right) \left(x_{ia} - \IAmean{x}_i\right)
+                        c_{ij} = \frac{1}{M} \sum_{a=1}^M \left(x_{ia} - \IAmean{x}_i\right) \left(x_{ja} - \IAmean{x}_j\right)
                     \]
                 
-                Since matrices add linearly, we can factor out the summation $\frac{1}{M} \sum_{i=1}^M$. Then we can write
+                Since matrices add linearly, we can factor out the summation $\frac{1}{M} \sum_{a=1}^M$. Now we can write the whole matrix,
                     \[
-                        C = \frac{1}{M} \sum_{i=1}^M \IAmatrix{
+                        C = \frac{1}{M} \sum_{a=1}^M \IAmatrix{
                             \left(x_{1a} - \IAmean{x}_1\right) \left(x_{1a} - \IAmean{x}_1\right) & \dotsc  & \left(x_{1a} - \IAmean{x}_1\right) \left(x_{pa} - \IAmean{x}_p\right) \\
                             \vdots & \ddots & \\
                             \left(x_{pa} - \IAmean{x}_p\right) \left(x_{1a} - \IAmean{x}_1\right) &  & \left(x_{pa} - \IAmean{x}_p\right) \left(x_{pa} - \IAmean{x}_p\right)
                         }
-                    \] \Inote{Clarify notation because $\IAmean{x}_p$ is not defined anywhere}
+                    \] 
                 
-                Now consider the term $\Phi_a \Phi_a^T = (P_i - \IAmean{P})(P_i - \IAmean{P})^T$, as defined in the theorem. Since the transpose operator is distributive,
+                Now consider the term $\Phi_a \Phi_a^T = (P_a - \IAmean{P})(P_a - \IAmean{P})^T$, as defined in the theorem. Since the transpose operator is distributive,
                 \begin{gather*}
-                    (P_i - \IAmean{P})(P_i - \IAmean{P})^{T} =
+                    (P_a - \IAmean{P})(P_a - \IAmean{P})^{T} =
                         \left(
                             \IAmatrix{
                                 x_{1a} \\
@@ -1180,7 +1186,7 @@
                         \right)
                         \left(
                             \IAmatrix{
-                                x_{1i} & x_{2i} & \dotsc & x_{pi}
+                                x_{1a} & x_{2a} & \dotsc & x_{pa}
                             } - \IAmean{P}^T
                         \right)
                     \\
@@ -1214,9 +1220,9 @@
                         x_{1a} - \IAmean{x}_1 & x_{2a} - \IAmean{x}_2 & \dotsc & x_{pa} - \IAmean{x}_p
                     }
                 \end{gather*}
-                \Inote{Once again, magic notation}
+            
 
-                Therefore,
+                Multiplying these two matrices, we get that
                     \[
                         \Phi_a {\Phi_a}^T = \IAmatrix{
                             \left(x_{1a} - \IAmean{x}_1\right)\left(x_{1a} - \IAmean{x}_1\right) & \dotsc & \left(x_{1a} - \IAmean{x}_1\right) \left(x_{pa} - \IAmean{x}_p\right) \\
@@ -1224,101 +1230,70 @@
                             \left(x_{pa} - \IAmean{x}_p\right) \left(x_{1a} - \IAmean{x}_1\right) & & \left(x_{pa} - \IAmean{x}_p\right) \left(x_{pa} - \IAmean{x}_p\right)
                         }
                     \]
+               
+                    Notice that any entry $A_{ij}$ in this final matrix resembles the formula for the covariance between the $i^{th}$ and $j^{th}$ variable. The only component missing is the summation on all values of $a$. Thus we can write,
                     \[
                         C = \frac{1}{M} \sum_{a=1}^M \Phi_a {\Phi_a}^T
                     \]
             \end{myproof}
 
-            \href{https://builtin.com/data-science/step-step-explanation-principal-component-analysis}{REFERENCE PRINCIPAL COMPONENT ANALYSIS} \Inote{Cite}
+            %\href{https://builtin.com/data-science/step-step-explanation-principal-component-analysis}{REFERENCE PRINCIPAL COMPONENT ANALYSIS} \Inote{Cite}
 
-            In the eigenface case, we wish to measure the difference between the face vectors $\Gamma_i$ and the average face. We can define the average face $\IAmean{\Gamma}$ as follows,
+            In the eigenface case, we wish to measure the difference between the face vectors $\Gamma_a$ and the average face. We define the average face $\IAmean{\Gamma}$ as follows,
                 \[
-                    \IAmean{\Gamma} = \frac{1}{M} \sum_{n=1}^M \Gamma_n
+                    \IAmean{\Gamma} = \frac{1}{M} \sum_{a=1}^M \Gamma_a
                 \]
 
-            We can write the difference $\Phi_i$ between the average face and the $i^{th}$ face,
+            We can write the difference $\Phi_a$ between the average face and the $a^{th}$ face,
                 \[
-                    \Phi_i = \Gamma_i - \IAmean{\Gamma}
+                    \Phi_a = \Gamma_a - \IAmean{\Gamma}
                 \]
+
             
-            \href{https://nzmaths.co.nz/category/glossary/variance-discrete-random-variable\#:\textasciitilde:text=A\%20measure\%20of\%20spread\%20for,2\%20or\%20\%CF\%832x.}{Hello}
-
-            \thm{Covariance Matrix Calculation}{
-                Let $C$ be an $N^2 \times N^2$ covariance matrix, defined as $C = \frac{1}{M} \sum_{n=1}^M \Phi_n \Phi_n^T$. Let $A$ be an $N^2 \times N^2$ matrix with columns $\IAmatrix{\Phi_1 & \Phi_2 & \cdots & \Phi_M}$. Then $C = AA^T$.
-            }
-
-            \begin{myproof}
-                Going back to our matrix $C$,
-                    \[
-                        C = \IAmatrix{
-                            \sigma_{11} & \sigma_{12} & \cdots & \sigma_{1p} \\
-                            \sigma_{21} & \sigma_{22} &        &             \\
-                            \vdots      &             & \ddots &             \\
-                            \sigma_{p1} &             &        & \sigma_{pp}
-                        }
-                    \]
-                
-                We can expand $C$ according to the defintiion of $\sigma$,
-                    \[
-                        C = \frac{1}{M} \sum_{a=1}^M \IAmatrix{
-                            \Phi_1 \Phi_1^T & \Phi_1 \Phi_2^T & \cdots & \Phi_1 \Phi_p^T \\
-                            \Phi_2 \Phi_1^T & \Phi_2 \Phi_2^T &        &                 \\
-                            \vdots          &                 & \ddots &                 \\
-                            \Phi_p \Phi_1^T &                 &        & \Phi_p \Phi_p^T
-                        }
-                    \]
-
-                \Inote{I'm not sure how this proves the statement. You didn't begine with the end or begining of theorem.}
-            \end{myproof}
-
-            Now we can express our eigenvectors $u_i$ and eigenvalues $\lambda_i$ as
+            %\href{https://nzmaths.co.nz/category/glossary/variance-discrete-random-variable\#:\textasciitilde:text=A\%20measure\%20of\%20spread\%20for,2\%20or\%20\%CF\%832x.}{Hello}
+            Following the rules of matrix multiplication, we can also rewrite our definition
+                \[
+                    C = \frac{1}{M} \sum_{a=1}^M \Phi_a {\Phi_a}^T
+                \]
+                \[
+                    C = AA^T
+                \]
+            Where $A$ is a matrix with columns $\IAmatrix{\Phi_1 & \Phi_2 & \cdots & \Phi_M}$.
+           
+            Now we express the eigenvectors $u_i$ and eigenvalues $\lambda_i$ of our covariance matrix as
                 \[
                     \lambda _{i} u_{i} =AA^{T} u_{i}
                 \]
 
             However, $AA^T$ is an $N^2 \times N^2$ matrix, which for images of any reasonable size is going to be very large.
 
-            Let 
+            Consider instead the eigenvalues of $A^T A$, 
                 \[
-                    S = AA^T = \lambda_i u_i
+                    A^TAv_{i} = \lambda_i v_i
                 \]
             
-            Then,
+            Multiplying both sides of our equation by $A$ we get
                 \[
-                    S^T = (AA^T)^T = A^T A
+                    AA^TAv_{i} = \lambda_i Av_{i}
                 \]
-            \Inote{This is wrong, $AA^T$ is symmetrical. Proof: $(AA^T)^T = (A^T)^T (A)^T = AA^T$.}
 
-            We can then show that $S$ and $S^T$ have the same eigenvalues with a short proof.
-
-            \begin{myproof}
-                Since the identity matrix is symmetrical, the transpose operation is distributive, and $\det(A) = \det\left(A^T\right)$,
-                    \[
-                        \det\left(S^T - \lambda_i I\right) = \det\left(\left(S^T - \lambda_i I\right)^T\right) = \det\left(\left(S^T\right)^T - \lambda_i I^T\right) = \det(S - \lambda_i I)
-                    \]
-                Therefore, $S$ and $S^T$ have the same characteristic polynomial and the same eigenvalues.
-                \Inote{This is wrong, the eigenvectors of a matrix and its transpose are not the same}
-            \end{myproof}
-
-            Applying this to out eigenfaces,
-                \[
-                    S^T = A^T A = \lambda_i u_i
-                \] \IAnote{wrong}
-            The advantage of effectively reordering the $A$ and $A^T$ is that out new matrix is $S^T$ is an $M \times M$ matrix. $M$ corresponds to the number of images in the training set, whic in most cases is much smaller than the dimension of the resolution of the image. Therefore we have overcome the main obstacle in our path, and from this point on it will be much easier to compute the eigenfaces.
+            Therefore, for any eigenvector $v_i$ of $A^TA$, $u_{i}=Av_{i}$ is an eigenvector of $AA^T$\cite{wiki:Eigenface}.
+             
+            We can now focus on the eigenvectors of $A^TA$ instead. The advantage of effectively reordering the $A$ and $A^T$ is that out new matrix is an $M \times M$ matrix. $M$ corresponds to the number of images in the training set, which in most cases is much smaller than the dimension of the resolution of the image. Therefore we have overcome the main obstacle in our path, and from this point on it will be much easier to compute the eigenfaces.
             
-            We can write each face in the training set as a linear combination of our $n$ eigenfaces \Inote{Is $n$ the same as $N$, if so why?}
+            We can write each face in the training set as a linear combination of our $M$ eigenfaces
                 \[
-                    \Gamma_i = c_{i1} u_1 + c_{i2} u_2 + \dots + c_{in} u_n \\
-                    \Gamma_i = \sum_{i=1}^M c_{in} u_n
-                \] \Inote{This is also wrong, you are defining $\Phi_i$, not $\Gamma_i$ with this formula}
+                    \Gamma_a = c_{a1} u_1 + c_{a2} u_2 + \dots + c_{an} u_n \\
+                     = \sum_{i=1}^M c_{in} u_n
+                \] 
 
-            Similarly, we can describe a face image not in the training set as a combination of weights and eigenvectors, by solving the above equation for the weights $c_{i1},\dots,c_{in}$. With this last step we have a complete picture of the facial recognition process.
+            Similarly, we can describe a face image not in the training set as a combination of weights and eigenvectors, by solving the above equation for the weights $c_{a1},\dots,c_{an}$. With this last step we have a complete picture of the facial recognition process.
 
             We have walked through this process looking for facial recognition capabilities, as that was the historically taken route, but this use of eigenvectors is actually much more general. We can apply this method to a variety of data recognition processes, including the others mentioned in this report.
 
             Fingerprints, for example, are a very common form of biometric identification. The process of identifying a fingerprint is very similar to the facial recognition process.
             
-            With fingerprints, images are usually black or white (no gray), so we go from an 8-bit pixel image to a 2-bit pixel image \Inote{This is not how it works. Black and white has 1-bit color depth.}. From there, we follow the same process as we did with facial recognition. We can use eigenvectors to represent ``general fingerprints'', and we can identify new fingerprints by the weights it takes to represent them as a linear combination of eigenvectors. These ``eigen-fingerprints'' can be used as shown for the eigenfaces.
+            With fingerprints, images are usually black or white (no gray), so we go from an 8-bit image to a binary 1-bit image. From there, we follow the same process as we did with facial recognition. We can use eigenvectors to represent ``general fingerprints'', and we can identify new fingerprints by the weights it takes to represent them as a linear combination of eigenvectors. These ``eigen-fingerprints'' can be used in the same way as the eigenfaces to recognize fingerprints.
 
             \begin{figure}[H]
                 \centering
@@ -1326,7 +1301,7 @@
                 \caption{Example eigen-fingerprints and eigen-digitprints; digitprints are simply another form of fingerprint image \cite{Pavesic2022}}
             \end{figure}
 
-            Notice how these eigen-fingerprints get more detailed and granular as we increase the eighenvalue (in the image higher eigenvalues correspond with lower values of $i$). By combining these eigenvectors, we can recreate any reasonably similar fingerprint. This technology has direct applications in security, where a scanned fingerprint can be projected on to the subspace spanned by the chosen eigenvectors (typically less than the dimension of the original fingerprint image) and compared to a list of weights in the database of approved fingerprints. If the weights are very similar (less than a certain threshold of difference) with a fingerprint in the database, then the access is granted.
+            Notice how these eigen-fingerprints get more detailed and granular as we increase the eigenvalue (in the image higher eigenvalues correspond with lower values of $i$). By combining these eigenvectors, we can recreate any reasonably similar fingerprint. This technology has direct applications in security, where a scanned fingerprint can be projected on to the subspace spanned by the chosen eigenvectors (typically less than the dimension of the original fingerprint image) and compared to a list of weights in the database of approved fingerprints. If the weights are very similar (less than a certain threshold of difference) with a fingerprint in the database, then the access is granted.
 
             % Example calculation of covariance matrix
             % \ex{Covariance Matrix}{
